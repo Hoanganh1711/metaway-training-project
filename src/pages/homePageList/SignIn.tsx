@@ -3,7 +3,7 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
-import "C:/Users/Admin/Desktop/news-manager/src/index.css"
+import "C:/Users/admin/OneDrive/Máy tính/metaway-training-project/src/index.css"
 import { Link } from 'react-router-dom';
 
 function SignIn() {

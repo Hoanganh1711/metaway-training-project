@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import 'antd/dist/antd.css';
-import "C:/Users/Admin/Desktop/news-manager/src/index.css"
+import "C:/Users/admin/OneDrive/Máy tính/metaway-training-project/src/index.css"
 
 import {
   Button,

@@ -1,28 +1,28 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 .header {
-  background-color: #1187d2 ;
-  border-bottom: solid 1px; 
-  padding: 20px 0; 
-  justify-content: space-around; 
+  background-color: #1187d2;
+  border-bottom: solid 1px;
+  padding: 20px 0;
+  justify-content: space-around;
   align-items: center;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1 
+  z-index: 1;
 }
 
 .header-logo {
@@ -30,7 +30,7 @@ code {
   height: auto;
 }
 
-.login-btn{
+.login-btn {
   color: #fff;
   border: solid 1px #ccc;
   padding: 5px 10px;
@@ -50,7 +50,7 @@ code {
 
 .signin-form {
   max-width: 300px;
-  background-color: #fff;;
+  background-color: #fff;
   padding: 30px 20px !important;
   margin: 100px auto !important;
   border: solid 1px #ccc;
@@ -74,4 +74,14 @@ code {
 .footer {
   text-align: center;
   padding-bottom: 50px;
+}
+
+/* ShowNews CSS */
+.hide {
+  overflow: hidden;
+  max-height: 13ch;
+}
+
+.show {
+  max-height: 100%;
 }
