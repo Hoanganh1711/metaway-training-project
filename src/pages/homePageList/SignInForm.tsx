@@ -1,16 +1,41 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
-import "C:/Users/admin/OneDrive/Máy tính/metaway-training-project/src/index.css"
+import "../../index.css"
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function SignIn() {
 
+    const [userName, setUserName] = useState("")
+    const [passWord, setPassWord] = useState("")
+
+    const [token, setToken] = useState('')
+
     const onFinish = (values: any) => {
-        console.log('Received values of form: ', values);
+        console.log(values);
+        setUserName(values.username)
+        setPassWord(values.password)
     };
+
+    const logInApi = () => {
+        axios.post('https://heroku-manager-news.herokuapp.com/api/auth/signin', {
+            username: userName,
+            password: passWord,
+        })
+            .then(response => {
+                console.log(response);
+                console.log(response.data.token);
+                setToken(response.data.token)
+                localStorage.setItem('token', token)
+            })
+            .catch(error => {
+                console.log("error", error);
+            })
+    }
+
 
     return (
         <Form
@@ -58,11 +83,11 @@ function SignIn() {
             </Form.Item>
 
             <Form.Item>
-                <Button type="primary" htmlType="submit" className="login-form-button">
+                <Button onClick={logInApi} type="primary" htmlType="submit" className="login-form-button">
                     Log in
                 </Button>
             </Form.Item>
-                Or <Link to="/signUp">register now!</Link>
+            Or <Link to="/signUp">register now!</Link>
         </Form>
     )
 }

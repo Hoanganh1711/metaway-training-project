@@ -4,10 +4,12 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./App";
-import SignIn from "./pages/homePageList/SignIn";
-import SignUp from "./pages/homePageList/SingUp";
+import SignIn from "./pages/homePageList/SignInForm";
+import SignUp from "./pages/homePageList/SignUpForm";
 import HomePageContent from "./pages/homePageList/HomePageContent";
 import ShowNews from "./pages/homePageList/ShowNews";
+import Manager from "./pages/Admin/Manager";
+import UsersInfo from "./pages/Admin/UsersInfo";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 
@@ -15,8 +17,8 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <BrowserRouter>
-    <Provider store={store}>
+  <Provider store={store}>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
           <Route path="/" element={<HomePageContent />} />
@@ -25,8 +27,13 @@ root.render(
           <Route path="/showNews" element={<ShowNews />} />
         </Route>
       </Routes>
-    </Provider>
-  </BrowserRouter>
+      <Routes>
+        <Route path="/Manager" element={<Manager />}>
+          <Route path="/Manager/UsersInfo" element={<UsersInfo />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

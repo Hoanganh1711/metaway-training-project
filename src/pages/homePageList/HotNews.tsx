@@ -2,7 +2,7 @@ import { EyeOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { MessageOutlined } from "@ant-design/icons";
 import { List, Space } from "antd";
-import "C:/Users/admin/OneDrive/Máy tính/metaway-training-project/src/index.css";
+import "C:/Users/Admin/Desktop/metaway-training-project/src/index.css"
 import { Link } from "react-router-dom";
 import {
   setTitle,

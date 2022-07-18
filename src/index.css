@@ -48,20 +48,20 @@ code {
   margin-left: 5px;
 }
 
-.signin-form {
+form#normal_login{
   max-width: 300px;
   background-color: #fff;
-  padding: 30px 20px !important;
-  margin: 100px auto !important;
+  padding: 30px 20px;
+  margin: 100px auto;
   border: solid 1px #ccc;
   border-radius: 10px;
 }
 
-.signup-form {
+form#register {
   width: 500px;
   background-color: #fff;
-  padding: 50px 20px 30px 0px !important;
-  margin: 100px auto !important;
+  padding: 50px 20px 30px 0px;
+  margin: 100px auto;
   border: solid 1px #ccc;
   border-radius: 10px;
 }
@@ -84,4 +84,41 @@ code {
 
 .show {
   max-height: 100%;
+}
+
+/* admin tamplate CSS */
+aside.ant-layout-sider.ant-layout-sider-dark.ant-layout-sider-has-trigger {
+  flex: 0 0 200px;
+  max-width: 200px;
+  min-width: 200px;
+  width: 200px;
+  /* position: fixed; */
+  top: 0;
+  bottom: 0;
+}
+
+ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-dark {
+  padding-top: 30px;
+}
+
+
+/* Info CSS */
+.Info-container {
+  background-color: #fff;
+  width: 70%;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 0 auto;
+}
+
+.Info-header {
+  justify-content: left;
+}
+
+.heading-info {
+  margin-left: 32px;
+}
+
+.info-item {
+  padding-left: 8px;
 }
