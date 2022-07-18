@@ -10,6 +10,7 @@ import HomePageContent from "./pages/homePageList/HomePageContent";
 import ShowNews from "./pages/homePageList/ShowNews";
 import Manager from "./pages/Admin/Manager";
 import UsersInfo from "./pages/Admin/UsersInfo";
+import CreateNewsForm from "./pages/Admin/CreateNewsForm";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 
@@ -30,6 +31,7 @@ root.render(
       <Routes>
         <Route path="/Manager" element={<Manager />}>
           <Route path="/Manager/UsersInfo" element={<UsersInfo />} />
+          <Route path="/Manager/CreateNewsForm" element={<CreateNewsForm />}/>
         </Route>
       </Routes>
     </BrowserRouter>

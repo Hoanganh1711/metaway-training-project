@@ -122,3 +122,8 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-dark {
 .info-item {
   padding-left: 8px;
 }
+
+/* Create News Form CSS */
+.ql-editor.ql-blank {
+  height: 200px;
+}

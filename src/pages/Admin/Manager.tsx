@@ -3,7 +3,6 @@ import 'antd/dist/antd.css';
 import "../../index.css"
 import { Outlet, Route, Routes } from 'react-router-dom';
 import ManagerSidebar from './ManagerSidebar';
-import AdminInfo from './UsersInfo';
 
 const { Content, Footer } = Layout;
 

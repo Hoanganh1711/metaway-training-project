@@ -10,7 +10,7 @@ import {
 import { notification } from 'antd';
 import { Col, Row } from 'antd'
 import React, { useRef, useState } from 'react'
-import "C:/Users/Admin/Desktop/metaway-training-project/src/index.css"
+import "../../index.css"
 import { useSelector } from "react-redux";
 import { selectAuthor, selectContent, selectPhoto, selectTitle } from '../../features/counter/counterSlice';
 import { useAppSelector } from '../../app/hooks';

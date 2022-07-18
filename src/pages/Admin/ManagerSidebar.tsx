@@ -39,7 +39,7 @@ const ManagerSidebar = () => {
                     key: "form",
                     icon: <FormOutlined />,
                     title: "Đăng tin",
-                    link: "./PostNewForm"
+                    link: "./CreateNewsForm"
                 },
                 // {
                 //     key: "NewsManager",
