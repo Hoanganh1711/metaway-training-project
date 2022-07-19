@@ -68,12 +68,7 @@ const HotNews = () => {
                   icon={EyeOutlined}
                   text={hotNewsList[index].views}
                   key="list-vertical-star-o"
-                />,
-                <IconText
-                  icon={MessageOutlined}
-                  text="2"
-                  key="list-vertical-message"
-                />,
+                />
               ]}
               extra={
                 <img

@@ -36,7 +36,8 @@ function SignIn() {
                 localStorage.setItem('token', response.data.token)
                 localStorage.setItem('name', response.data.username)
                 localStorage.setItem('email', response.data.email)
-                
+                localStorage.setItem('roles', response.data.roles[0])
+                console.log(response.data.roles[0]);
                 setTimeout(() => {
                     navigate('/')
                     window.location.reload()
@@ -46,7 +47,6 @@ function SignIn() {
                 console.log("error", error);
                 setError("Tên tài khoản hoặc mật khẩu chưa đúng !")
             })
-        // navigate('/')
     }
 
 
@@ -91,7 +91,7 @@ function SignIn() {
                     {error}
                 </span>
 
-                <Form.Item>
+                {/* <Form.Item>
                     <Form.Item name="remember" valuePropName="checked" noStyle>
                         <Checkbox>Remember me</Checkbox>
                     </Form.Item>
@@ -99,14 +99,14 @@ function SignIn() {
                     <a className="login-form-forgot" href="">
                         Forgot password
                     </a>
-                </Form.Item>
+                </Form.Item> */}
 
-                <Form.Item>
+                <Form.Item style={{textAlign: "center"}}>
                     <Button type="primary" htmlType="submit" className="login-form-button">
                         Log in
                     </Button>
                 </Form.Item>
-                Or <Link to="/signUp">register now!</Link>
+                Hoặc <Link to="/signUp">đăng ký ngay</Link>
             </Form>
         </>
     )

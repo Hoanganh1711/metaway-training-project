@@ -1,123 +1,107 @@
 import {
-    CommentOutlined,
-    LikeFilled,
-    LikeOutlined,
-    SaveFilled,
-    SaveOutlined,
-    TableOutlined,
-    UserOutlined
-} from '@ant-design/icons'
-import { notification } from 'antd';
-import { Col, Row } from 'antd'
-import React, { useRef, useState } from 'react'
-import "../../index.css"
+  CommentOutlined,
+  LikeFilled,
+  LikeOutlined,
+  SaveFilled,
+  SaveOutlined,
+  TableOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { notification } from "antd";
+import { Col, Row } from "antd";
+import React, { useRef, useState } from "react";
+import "../../index.css";
 import { useSelector } from "react-redux";
-import { selectAuthor, selectContent, selectPhoto, selectTitle } from '../../features/counter/counterSlice';
-import { useAppSelector } from '../../app/hooks';
+import {
+  selectAuthor,
+  selectContent,
+  selectPhoto,
+  selectTitle,
+} from "../../features/counter/counterSlice";
+import { useAppSelector } from "../../app/hooks";
 
 const ShowNews = () => {
+  const title = useAppSelector(selectTitle);
+  const content = useAppSelector(selectContent);
+  const author = useAppSelector(selectAuthor);
+  const photo = useAppSelector(selectPhoto);
 
-    const title = useAppSelector(selectTitle);
-    const content = useAppSelector(selectContent);
-    const author = useAppSelector(selectAuthor);
-    const photo = useAppSelector(selectPhoto);
-    
-    const [visibel, setVisibel] = useState(true)
-    const [like, setLike] = useState(true)
-    const [likeQuantity, setLikeQuantity] = useState(0)
-    const [save, setSave] = useState(true)
-    
-    const hided = visibel
-    const Like = like;
-    const Save = save
+  const [like, setLike] = useState(true);
+  const [likeQuantity, setLikeQuantity] = useState(0);
+  const [save, setSave] = useState(true);
 
-    // const newData = [
-    //     {
-    //         id: "",
-    //         title: "",
-    //         userName: "",
-    //         content: "",
-    //         hided: visibel,
-    //         like: like,
-    //         save: save
-    //     }
-    // ]
+  const Like = like;
+  const Save = save;
 
-    // Hàm xử lý thu gọn và xem thêm bài đăng
-    const handleToggle = () => {
-        if (visibel) {
-            setVisibel(false)
-        } else {
-            setVisibel(true)
-        }
+  //Hàm xử lý nút like
+  const handleLike = () => {
+    if (like) {
+      setLike(false);
+      setLikeQuantity(likeQuantity + 1);
+    } else {
+      setLike(true);
+      setLikeQuantity(likeQuantity - 1);
     }
+  };
 
-    //Hàm xử lý nút like
-    const handleLike = () => {
-        if (like) {
-            setLike(false)
-            setLikeQuantity(likeQuantity + 1)
-        } else {
-            setLike(true)
-            setLikeQuantity(likeQuantity - 1)
-        }
+  // Xử lý focus comment Input
+  const commentInput = useRef<any>(null);
+
+  const handleFocus = () => {
+    commentInput.current?.focus();
+  };
+
+  // Xử lý lưu tin tức
+
+  const Context = React.createContext({
+    name: "Default",
+  });
+
+  const [api, contextHolder] = notification.useNotification();
+
+  const handleSave = () => {
+    if (save) {
+      setSave(false);
+      api.info({
+        message: ``,
+        description: (
+          <Context.Consumer>
+            {({ name }) => `Đã lưu bài viết!`}
+          </Context.Consumer>
+        ),
+      });
+    } else {
+      setSave(true);
     }
+  };
 
+  return (
+    <Context.Provider
+      value={{
+        name: "Ant Design",
+      }}
+    >
+      {contextHolder}
+      <Col span={15} style={{ margin: "0 auto" }}>
+        <Row>
+          <Col span={15} style={{ margin: "auto" }}>
+            <div
+              className="new-contener"
+              style={{ backgroundColor: "#fff", marginTop: 20 }}
+            >
+              <div style={{ padding: 20 }}>
+                <h1 className="new-title">{title}</h1>
+                <Row>{photo}</Row>
+                <div>{content}</div>
+                <br></br>
+                <Row style={{ justifyContent: "flex-end" }}>
+                  <p>
+                    Tác giả: <b>{author}</b>
+                  </p>
+                </Row>
+              </div>
 
-    // Xử lý focus comment Input
-    const commentInput = useRef<any>(null);
-
-    const handleFocus = () => {
-        commentInput.current?.focus();
-    }
-
-    // Xử lý lưu tin tức
-
-    const Context = React.createContext({
-        name: 'Default',
-    });
-
-    const [api, contextHolder] = notification.useNotification();
-
-    const handleSave = () => {
-        if (save) {
-            setSave(false)
-            api.info({
-                message: ``,
-                description: <Context.Consumer>{({ name }) => `Đã lưu bài viết!`}</Context.Consumer>,
-            });
-        } else {
-            setSave(true)
-        }
-    }
-
-    return (
-        <Context.Provider
-            value={{
-                name: 'Ant Design',
-            }}>
-            {contextHolder}
-            <Col span={15} style={{ margin: "0 auto" }}>
-                <Row>
-                    <Col span={15} style={{ margin: "auto" }}>
-                            <div className='new-contener' style={{ backgroundColor: "#fff", marginTop: 20 }}>
-                                <div style={{ padding: 20 }}>
-                                    <h2 className='new-title'>{title}</h2>
-                                    <p>{author}</p>
-                                    <Row>
-                                        {photo}
-                                    </Row>
-                                    <div >
-                                        {content}
-                                    </div>
-                                    <div style={{ color: 'blue', cursor: "pointer", display: "inline-block" }}>
-                                        <p onClick={handleToggle}>
-                                            {visibel ? ". . . Xem thêm" : "Rút gọn"}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className='feedback-items'>
+              {/* <div className='feedback-items'>
                                     <Row style={{ justifyContent: "space-around", fontSize: 20, marginTop: 10, padding: "10px 0", borderTop: "solid 1px #ccc", borderBottom: "solid 1px #ccc" }}>
                                         <div style={{ cursor: "pointer" }} onClick={handleLike}>{Like ? <LikeOutlined /> : <LikeFilled />}(<span>{likeQuantity}</span>)</div>
                                         <div style={{ cursor: "pointer" }} onClick={handleFocus}><CommentOutlined /></div>
@@ -132,13 +116,13 @@ const ShowNews = () => {
                                             name="comment"
                                         />
                                     </Row>
-                                </div>
-                            </div>
-                    </Col>
-                </Row>
-            </Col >
-        </Context.Provider>
-    )
-}
+                                </div> */}
+            </div>
+          </Col>
+        </Row>
+      </Col>
+    </Context.Provider>
+  );
+};
 
-export default ShowNews
+export default ShowNews;

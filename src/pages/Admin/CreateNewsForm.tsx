@@ -6,11 +6,27 @@ import { useEffect, useState } from "react";
 import { UploadFile } from "antd/lib/upload/interface";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
+import axios from "axios";
 
 const CreateNewsForm = () => {
-  const { Option } = Select;
 
+  const [inputTitle, setInputTitle] = useState('')
+  const [inputDescription, setInputDescription] = useState('')
   const { quill, quillRef } = useQuill();
+  const [uploadPhoto, setUploatPhoto] = useState([])
+
+  useEffect(() => {
+    if (quill) {
+      quill.on("text-change", (delta: any, oldDelta: any, source: any) => {
+        // console.log("Text change!");
+        // console.log(quill.getText()); // Get text only
+        // console.log(quill.getContents()); // Get delta contents
+        // console.log(quill.root.innerHTML); // Get innerHTML using quill
+        // console.log(quillRef.current.firstChild.innerHTML); // Get innerHTML using quillRef
+      });
+    }
+  }, [quill]);
+  
 
   const normFile = (e: any) => {
     console.log("Upload event:", e);
@@ -22,35 +38,31 @@ const CreateNewsForm = () => {
     return e?.fileList;
   };
 
-  const fileList: UploadFile[] = [
-    // {
-    //     uid: '-1',
-    //     name: 'xxx.png',
-    //     status: 'done',
-    //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    //     thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    // },
-  ];
+  const PostNews = () => {
+    axios.post('https://heroku-manager-news.herokuapp.com/api/test/admin', {
+      title: inputTitle,
+      description: inputDescription,
+      content: quill.getText(),
+      img: uploadPhoto,
+    })
+    .then(response => {
+      console.log((response));
+    })
+    .catch(error => {
+      console.log(error);
+    })
+  }
 
-  // const [inputedValue, setInputedValue] = useState([])
+  const handleInputTitle = (e: any) => {
+    setInputTitle(e.target.value);
+  };
 
-  const newsAPI = "https://heroku-manager-news.herokuapp.com/api/test/user";
+  const handleInputDescription = (e: any) => {
+    setInputDescription(e.target.value);
+  };
 
-  const onFinish = (value: any) => {
-    console.log("Success:", value);
-    const topic = "";
-    const title = value.title;
-    const content = value.content;
-    const photo = value.upload;
-
-    const option = {
-      method: "POST",
-      body: JSON.stringify(value),
-    };
-
-    fetch(newsAPI, option).then((response) => {
-      response.json();
-    });
+  const handleUploadPhoto = (e: any) => {
+    setUploatPhoto(e);
   };
 
   return (
@@ -64,24 +76,7 @@ const CreateNewsForm = () => {
         }}
       >
         <div>
-          <Form name="validate_other" onFinish={onFinish}>
-            <Form.Item
-              name="topic"
-              hasFeedback
-              rules={[
-                {
-                  required: true,
-                  message: "Hãy chọn chủ đề của bài viết!",
-                },
-              ]}
-            >
-              <Select placeholder="Chọn chủ đề *">
-                <Option value="Chủ đề 1">Chủ đề 1</Option>
-                <Option value="Chủ đề 2">Chủ đề 2</Option>
-                <Option value="Chủ đề 3">Chủ đề 3</Option>
-              </Select>
-            </Form.Item>
-
+          <Form name="validate_other">
             <Form.Item
               name="title"
               rules={[
@@ -95,29 +90,24 @@ const CreateNewsForm = () => {
                 showCount
                 maxLength={20}
                 placeholder="Nhập tiêu đề bài viết *"
+                onChange={handleInputTitle}
               />
             </Form.Item>
 
-            <Form.Item
-              name="description"
-            >
-              <Input
-                placeholder="Mô tả"
-              />
+            <Form.Item name="description">
+              <Input placeholder="Mô tả" onChange={handleInputDescription} />
             </Form.Item>
 
             <Form.Item
               name="content"
-              rules={[
-                {
-                  required: true,
-                  message: "Hãy nhập nội dung của bài viết!",
-                },
-              ]}
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: "Hãy nhập nội dung của bài viết!",
+              //   },
+              // ]}
             >
-              <div >
-                <div ref={quillRef} />
-              </div>
+              <div ref={quillRef} />
             </Form.Item>
 
             <Form.Item
@@ -128,9 +118,8 @@ const CreateNewsForm = () => {
               <Upload
                 action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                 listType="picture"
-                // defaultFileList={[...fileList]}
                 className="upload-list-inline"
-              // onChange={handleUploadPhoto}
+                onChange={handleUploadPhoto}
               >
                 <Button icon={<UploadOutlined />}>Thêm ảnh</Button>
               </Upload>
@@ -142,7 +131,7 @@ const CreateNewsForm = () => {
                 offset: 6,
               }}
             >
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" onClick={PostNews}>
                 Đăng tin
               </Button>
             </Form.Item>

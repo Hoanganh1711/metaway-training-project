@@ -2,9 +2,8 @@ import {
     FormOutlined,
     UserOutlined,
     HomeFilled,
-    SnippetsOutlined,
-    SolutionOutlined,
-    TeamOutlined,
+    IdcardOutlined,
+    FileSearchOutlined
 } from '@ant-design/icons';
 import { Image } from 'antd';
 import 'antd/dist/antd.css';
@@ -32,9 +31,15 @@ const ManagerSidebar = () => {
             children: [
                 {
                     key: "AdminInfo",
-                    icon: <SolutionOutlined />,
+                    icon: <IdcardOutlined />,
                     title: "Thông tin cá nhân",
                     link: "./UsersInfo"
+                },
+                {
+                    key: "manager",
+                    icon: <FileSearchOutlined />,
+                    title: "Quản lý tin tức",
+                    link: "./NewsManager"
                 },
                 {
                     key: "form",
@@ -42,6 +47,7 @@ const ManagerSidebar = () => {
                     title: "Đăng tin",
                     link: "./CreateNewsForm"
                 },
+                
                 // {
                 //     key: "NewsManager",
                 //     icon: <SnippetsOutlined />,

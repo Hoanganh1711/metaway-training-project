@@ -10,7 +10,6 @@ import {
   setAuthor,
   setPhoto,
 } from "../../features/counter/counterSlice";
-import { useDispatch } from "react-redux";
 import { useAppDispatch } from "../../app/hooks";
 
 const NewCreateNews = () => {
