@@ -30,6 +30,13 @@ code {
   height: auto;
 }
 
+.login-box,
+.logout-box {
+  display: flex;
+  align-items: center;
+}
+
+.logout-btn,
 .login-btn {
   color: #fff;
   border: solid 1px #ccc;
@@ -38,6 +45,7 @@ code {
   border-radius: 5px;
 }
 
+.logout-btn:hover,
 .login-btn:hover {
   color: #fff;
   background-color: blue;

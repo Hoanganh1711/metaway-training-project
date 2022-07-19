@@ -99,6 +99,14 @@ const CreateNewsForm = () => {
             </Form.Item>
 
             <Form.Item
+              name="description"
+            >
+              <Input
+                placeholder="Mô tả"
+              />
+            </Form.Item>
+
+            <Form.Item
               name="content"
               rules={[
                 {
@@ -122,7 +130,7 @@ const CreateNewsForm = () => {
                 listType="picture"
                 // defaultFileList={[...fileList]}
                 className="upload-list-inline"
-                // onChange={handleUploadPhoto}
+              // onChange={handleUploadPhoto}
               >
                 <Button icon={<UploadOutlined />}>Thêm ảnh</Button>
               </Upload>

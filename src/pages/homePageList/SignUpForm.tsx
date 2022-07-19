@@ -1,13 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import 'antd/dist/antd.css';
 import "../../index.css"
-
+import axios from 'axios';
 import {
   Button,
-  Checkbox,
   Form,
   Input,
+  Modal,
 } from 'antd';
+import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const formItemLayout = {
   labelCol: {
@@ -48,9 +50,49 @@ function SignUp() {
     console.log('Received values of form: ', values);
   };
 
+  const [inputUserName, setInputUserName] = useState('')
+  const [inputPassWord, setInputPassWord] = useState('')
+  const [inputEmail, setInputEmail] = useState('')
+
+  const handleInputUsername = (e: any) => {
+    setInputUserName(e.target.value);
+  }
+
+  const handleInputPassword = (e: any) => {
+    setInputPassWord(e.target.value);
+  }
+
+  const handleInputEmail = (e: any) => {
+    setInputEmail(e.target.value)
+  }
+
+  const SingUp = () => {
+    axios.post('https://heroku-done-all-manager.herokuapp.com/api/auth/signup', {
+      username: inputUserName,
+      password: inputPassWord,
+      email: inputEmail
+    })
+      .then(response => {
+        console.log(response);
+        success()
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
+  const navigate = useNavigate();
+
+  const success = () => {
+    Modal.success({
+      content: 'Đăng ký thành công!',
+    });
+    navigate("/signIn")
+  };
+
   return (
     <Form
-    className='signup-form'
+      className='signup-form'
       {...formItemLayout}
       form={form}
       name="register"
@@ -62,20 +104,33 @@ function SignUp() {
       scrollToFirstError
     >
       <Form.Item
-        name="email"
-        label="E-mail"
+        name="userName"
+        label="User Name"
         rules={[
           {
-            type: 'email',
-            message: 'The input is not valid E-mail!',
-          },
-          {
             required: true,
-            message: 'Please input your E-mail!',
+            message: 'Please input your User Name!',
           },
         ]}
       >
-        <Input />
+        <Input onChange={handleInputUsername} />
+      </Form.Item>
+
+      <Form.Item
+        name="email"
+        label="Email"
+        rules={[
+          {
+            type: "email",
+            message: 'The input is not valid Email!',
+          },
+          {
+            required: true,
+            message: 'Please input your Email!',
+          },
+        ]}
+      >
+        <Input onChange={handleInputEmail} />
       </Form.Item>
 
       <Form.Item
@@ -89,7 +144,7 @@ function SignUp() {
         ]}
         hasFeedback
       >
-        <Input.Password />
+        <Input.Password onChange={handleInputPassword} />
       </Form.Item>
 
       <Form.Item
@@ -115,24 +170,8 @@ function SignUp() {
       >
         <Input.Password />
       </Form.Item>
-
-      <Form.Item
-        name="agreement"
-        valuePropName="checked"
-        rules={[
-          {
-            validator: (_, value) =>
-              value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),
-          },
-        ]}
-        {...tailFormItemLayout}
-      >
-        <Checkbox>
-          I have read the <a href="">agreement</a>
-        </Checkbox>
-      </Form.Item>
       <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit">
+        <Button onClick={SingUp} type="primary" htmlType="submit">
           Register
         </Button>
       </Form.Item>

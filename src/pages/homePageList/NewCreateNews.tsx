@@ -57,7 +57,7 @@ const NewCreateNews = () => {
             onChange: (page) => {
               console.log(page);
             },
-            pageSize: 3,
+            pageSize: 4,
           }}
           dataSource={hotNewsList}
           renderItem={(item, index) => (

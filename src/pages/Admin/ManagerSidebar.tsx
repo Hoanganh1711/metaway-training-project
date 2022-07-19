@@ -6,6 +6,7 @@ import {
     SolutionOutlined,
     TeamOutlined,
 } from '@ant-design/icons';
+import { Image } from 'antd';
 import 'antd/dist/antd.css';
 import '../../index.css'
 import { Layout, Menu } from 'antd';
@@ -61,7 +62,7 @@ const ManagerSidebar = () => {
         <>
             <Sider collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
                 <Menu theme="dark" defaultSelectedKeys={[location.pathname]} mode="inline">
-                    <img key="logo" style={{ width: "60%", marginLeft: 20 }} src='https://cdn.logo.com/hotlink-ok/logo-social.png'></img>
+                    <Image style={{ width: "60%", marginLeft: 20 }} src='https://cdn.logo.com/hotlink-ok/logo-social.png'/>
                     {items.map((item) =>
                         !item.children ? (
                             <Menu.Item key={item.key}>

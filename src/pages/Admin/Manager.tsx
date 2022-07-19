@@ -1,7 +1,7 @@
 import { Layout } from 'antd';
 import 'antd/dist/antd.css';
 import "../../index.css"
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import ManagerSidebar from './ManagerSidebar';
 
 const { Content, Footer } = Layout;

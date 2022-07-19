@@ -101,7 +101,7 @@ const ShowNews = () => {
                 <Row>
                     <Col span={15} style={{ margin: "auto" }}>
                             <div className='new-contener' style={{ backgroundColor: "#fff", marginTop: 20 }}>
-                                <div style={{ padding: 20, }}>
+                                <div style={{ padding: 20 }}>
                                     <h2 className='new-title'>{title}</h2>
                                     <p>{author}</p>
                                     <Row>
