@@ -27,17 +27,20 @@ function SignIn() {
     const logInApi = (userName: string, passWord: string) => {
         axios.post('https://heroku-done-all-manager.herokuapp.com/api/auth/signin', {
             username: userName,
-            password: passWord,
+            password: passWord,  
         })
             .then(response => {
+                // const history = useHistory()
                 console.log(response);
                 console.log(response.data.token);
-                setToken(response.data.token)
-                localStorage.setItem('token', response.data.token)
-                localStorage.setItem('name', response.data.username)
-                localStorage.setItem('email', response.data.email)
+                const token = response.data.token
+                setToken(token)
+                localStorage.setItem('token', token)
+                // localStorage.setItem('name', response.data.username)
+                // localStorage.setItem('email', response.data.email)
                 localStorage.setItem('roles', response.data.roles[0])
                 console.log(response.data.roles[0]);
+
                 setTimeout(() => {
                     navigate('/')
                     window.location.reload()

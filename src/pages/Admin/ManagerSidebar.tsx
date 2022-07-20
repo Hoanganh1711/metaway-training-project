@@ -47,19 +47,6 @@ const ManagerSidebar = () => {
                     title: "Đăng tin",
                     link: "./CreateNewsForm"
                 },
-                
-                // {
-                //     key: "NewsManager",
-                //     icon: <SnippetsOutlined />,
-                //     title: "Quản lý bài viết",
-                //     link: "./NewsManager"
-                // },
-                // {
-                //     key: "NewsManager",
-                //     icon: <TeamOutlined />,
-                //     title: "Quản lý người dùng",
-                //     link: "./NewsManager"
-                // },
             ]
         },
     ];

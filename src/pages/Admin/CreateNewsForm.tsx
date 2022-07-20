@@ -7,58 +7,87 @@ import { UploadFile } from "antd/lib/upload/interface";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
 import axios from "axios";
+import { url } from "inspector";
 
 const CreateNewsForm = () => {
 
   const [inputTitle, setInputTitle] = useState('')
   const [inputDescription, setInputDescription] = useState('')
-  const { quill, quillRef } = useQuill();
+  const [inputContent, setInputContent] = useState('')
   const [uploadPhoto, setUploatPhoto] = useState([])
 
+  const { quill, quillRef } = useQuill();
   useEffect(() => {
     if (quill) {
       quill.on("text-change", (delta: any, oldDelta: any, source: any) => {
-        // console.log("Text change!");
-        // console.log(quill.getText()); // Get text only
-        // console.log(quill.getContents()); // Get delta contents
-        // console.log(quill.root.innerHTML); // Get innerHTML using quill
-        // console.log(quillRef.current.firstChild.innerHTML); // Get innerHTML using quillRef
+        setInputContent(quill.getText())
       });
     }
   }, [quill]);
-  
+
 
   const normFile = (e: any) => {
     console.log("Upload event:", e);
+    console.log(e.file);
+
 
     if (Array.isArray(e)) {
       return e;
     }
 
-    return e?.fileList;
+    // return e?.fileList;
   };
 
-  const PostNews = () => {
-    axios.post('https://heroku-manager-news.herokuapp.com/api/test/admin', {
+  const CreateNews = () => {
+    axios.post('https://heroku-done-all-manager.herokuapp.com/api/news/create', {
       title: inputTitle,
       description: inputDescription,
-      content: quill.getText(),
-      img: uploadPhoto,
+      content: inputContent,
+      // img: uploadPhoto,
+      status: true,
+      author: "admin2",
+      views: 0
     })
-    .then(response => {
-      console.log((response));
-    })
-    .catch(error => {
-      console.log(error);
-    })
+      .then(response => {
+        console.log((response));
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
+    // const data = {
+    //   title: inputTitle,
+    //   description: inputDescription,
+    //   content: inputContent,
+    //   // img: uploadPhoto,
+    //   status: true,
+    //   author: inputTitle,
+    //   views: 0
+    // }
+
+    // const url = "https://heroku-done-all-manager.herokuapp.com/api/news/create";
+    // fetch(url, {
+    //   method: "POST",
+    //   body: JSON.stringify(data)
+    // })
+    // .then(response => {
+    //   // response.json();
+    //   console.log(response);
+
+    // })
+    // .catch(error => {
+    //   console.log(error);
+    // })
   }
 
   const handleInputTitle = (e: any) => {
     setInputTitle(e.target.value);
+    // console.log(e.target.value);
   };
 
   const handleInputDescription = (e: any) => {
     setInputDescription(e.target.value);
+    // console.log(e.target.value);
   };
 
   const handleUploadPhoto = (e: any) => {
@@ -94,18 +123,25 @@ const CreateNewsForm = () => {
               />
             </Form.Item>
 
-            <Form.Item name="description">
+            <Form.Item
+              name="description"
+              rules={[
+                {
+                  required: true,
+                  message: "Hãy nhập mô tả của bài viết!",
+                },
+              ]}>
               <Input placeholder="Mô tả" onChange={handleInputDescription} />
             </Form.Item>
 
             <Form.Item
               name="content"
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: "Hãy nhập nội dung của bài viết!",
-              //   },
-              // ]}
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Hãy nhập nội dung của bài viết!",
+            //   },
+            // ]}
             >
               <div ref={quillRef} />
             </Form.Item>
@@ -131,7 +167,7 @@ const CreateNewsForm = () => {
                 offset: 6,
               }}
             >
-              <Button type="primary" htmlType="submit" onClick={PostNews}>
+              <Button type="primary" htmlType="submit" onClick={CreateNews}>
                 Đăng tin
               </Button>
             </Form.Item>

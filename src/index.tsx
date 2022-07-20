@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import App from "./App";
 import SignIn from "./pages/homePageList/SignInForm";
 import SignUp from "./pages/homePageList/SignUpForm";
@@ -30,10 +30,10 @@ root.render(
         </Route>
       </Routes>
       <Routes>
-        <Route path="/Manager" element={<Manager />}>
+        <Route path="/Manager" element={localStorage.getItem("roles") === "ROLE_ADMIN" ? <Manager /> : <Navigate to="/" />}>
           <Route path="/Manager/UsersInfo" element={<UsersInfo />} />
-          <Route path="/Manager/CreateNewsForm" element={<CreateNewsForm />}/>
-          <Route path="/Manager/NewsManager" element={<NewsManager />}/>
+          <Route path="/Manager/CreateNewsForm" element={<CreateNewsForm />} />
+          <Route path="/Manager/NewsManager" element={<NewsManager />} />
         </Route>
       </Routes>
     </BrowserRouter>
