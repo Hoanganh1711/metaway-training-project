@@ -1,11 +1,15 @@
 import { SearchOutlined } from "@ant-design/icons";
-import type { InputRef } from "antd";
+import { InputRef, Select } from "antd";
 import { Button, Input, Space, Table } from "antd";
 import type { ColumnsType, ColumnType } from "antd/lib/table";
 import type { FilterConfirmProps } from "antd/lib/table/interface";
 import React, { useEffect, useId, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import "antd/dist/antd.css";
+import axios from "axios";
+import { Link } from "react-router-dom";
+
+const { Option } = Select;
 
 const NewsManager = () => {
   interface DataType {
@@ -22,27 +26,58 @@ const NewsManager = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
 
-  const newsListAPI = async () => {
-    const url = "https://heroku-done-all-manager.herokuapp.com/api/news/views";
-    const response = await fetch(url);
-    const newsData = await response.json();
-    console.log(newsData);
-    setNewsList(newsData);
-  };
-
+  const newsListAPI = () => {
+    axios.get('https://heroku-done-all-manager.herokuapp.com/api/news/manager/views',
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem("token")
+        }
+      })
+      .then(function (response) {
+        console.log(response.data);
+        setNewsList(response.data)
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+  }
+   
   useEffect(() => {
     newsListAPI();
   }, []);
 
-  const deleteOneNew = (index: any, row: any) => {
-    const filtered = newsList.filter((data) => {
-      console.log(data);
+  newsList.map(item => {
+    console.log(item.status);
+  })
 
-      return data.id !== row.id;
+  // Xóa bài viết
+  const deleteOneNew = (index: any, row: any) => {
+    newsList.filter((data) => {
+      console.log(data.status);
+      // const removeItem = data.id !== row.id;
+      axios.delete(`https://heroku-done-all-manager.herokuapp.com/api/news/delete/${row.id}`,
+        {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem("token")
+          }
+        })
+        .then(function (response) {
+          window.location.reload();
+          setNewsList(response.data)
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
     });
-    setNewsList(filtered);
-    console.log(filtered);
   };
+
+  //Edit 
+
+  const editModal = () => {
+    
+  }
+
+
 
   const searchInput = useRef<InputRef>(null);
 
@@ -147,7 +182,7 @@ const NewsManager = () => {
       title: "Tiêu đề",
       dataIndex: "title",
       key: "title",
-      width: "30%",
+      width: "20%",
       ...getColumnSearchProps("title"),
       // eslint-disable-next-line jsx-a11y/anchor-is-valid
       render: (text: string) => <a href="#">{text}</a>,
@@ -174,9 +209,26 @@ const NewsManager = () => {
       onFilter: (value: any, record: any) => record.topic.indexOf(value) === 0,
     },
     {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      width: "10%",
+      filters: [
+        {
+          text: "Chờ duyệt",
+          value: "Chờ duyệt",
+        },
+        {
+          text: "Công khai",
+          value: "Công khai",
+        }
+      ],
+      onFilter: (value: any, record: any) => record.topic.indexOf(value) === 0,
+    },
+    {
       title: "Ngày đăng",
-      dataIndex: "date",
-      key: "date",
+      dataIndex: "createdAt",
+      key: "createdAt",
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -186,10 +238,14 @@ const NewsManager = () => {
       render: (abc, row) => {
         return (
           <>
+            <Link to="/Manager/EditNews">Edit</Link>
+            <Select defaultValue="Chờ duyệt" style={{ width: 100 }}>
+              <Option key="pending" value="pending">Chờ duyệt</Option>
+              <Option key="public" value="public">Công khai</Option>
+            </Select>
             <Button onClick={() => deleteOneNew(abc, row)} type="link" danger>
-              Xóa tin
+              Remove
             </Button>
-            <Button type="link">Sửa tin</Button>
           </>
         );
       },
@@ -199,7 +255,7 @@ const NewsManager = () => {
   return (
     <>
       <Table
-        style={{ textAlign: "center", marginTop: 30 }}
+        style={{ marginTop: 30 }}
         columns={columns}
         dataSource={newsList}
       />

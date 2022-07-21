@@ -1,17 +1,16 @@
-import {
-  CommentOutlined,
-  LikeFilled,
-  LikeOutlined,
-  SaveFilled,
-  SaveOutlined,
-  TableOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+// import {
+//   CommentOutlined,
+//   LikeFilled,
+//   LikeOutlined,
+//   SaveFilled,
+//   SaveOutlined,
+//   TableOutlined,
+//   UserOutlined,
+// } from "@ant-design/icons";
 import { notification } from "antd";
 import { Col, Row } from "antd";
 import React, { useRef, useState } from "react";
 import "../../index.css";
-import { useSelector } from "react-redux";
 import {
   selectAuthor,
   selectContent,

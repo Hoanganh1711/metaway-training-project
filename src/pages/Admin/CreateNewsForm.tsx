@@ -47,6 +47,10 @@ const CreateNewsForm = () => {
       status: true,
       author: "admin2",
       views: 0
+    }, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem("token")
+      }
     })
       .then(response => {
         console.log((response));
@@ -54,40 +58,14 @@ const CreateNewsForm = () => {
       .catch(error => {
         console.log(error);
       })
-
-    // const data = {
-    //   title: inputTitle,
-    //   description: inputDescription,
-    //   content: inputContent,
-    //   // img: uploadPhoto,
-    //   status: true,
-    //   author: inputTitle,
-    //   views: 0
-    // }
-
-    // const url = "https://heroku-done-all-manager.herokuapp.com/api/news/create";
-    // fetch(url, {
-    //   method: "POST",
-    //   body: JSON.stringify(data)
-    // })
-    // .then(response => {
-    //   // response.json();
-    //   console.log(response);
-
-    // })
-    // .catch(error => {
-    //   console.log(error);
-    // })
   }
 
   const handleInputTitle = (e: any) => {
     setInputTitle(e.target.value);
-    // console.log(e.target.value);
   };
 
   const handleInputDescription = (e: any) => {
     setInputDescription(e.target.value);
-    // console.log(e.target.value);
   };
 
   const handleUploadPhoto = (e: any) => {
@@ -116,8 +94,6 @@ const CreateNewsForm = () => {
               ]}
             >
               <Input
-                showCount
-                maxLength={20}
                 placeholder="Nhập tiêu đề bài viết *"
                 onChange={handleInputTitle}
               />
@@ -136,12 +112,12 @@ const CreateNewsForm = () => {
 
             <Form.Item
               name="content"
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: "Hãy nhập nội dung của bài viết!",
-            //   },
-            // ]}
+            rules={[
+              {
+                required: true,
+                message: "Hãy nhập nội dung của bài viết!",
+              },
+            ]}
             >
               <div ref={quillRef} />
             </Form.Item>

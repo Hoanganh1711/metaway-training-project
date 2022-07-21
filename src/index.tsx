@@ -14,6 +14,7 @@ import CreateNewsForm from "./pages/Admin/CreateNewsForm";
 import NewsManager from "./pages/Admin/NewsManager";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
+import EditNews from "./pages/Admin/EditNews";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -34,6 +35,7 @@ root.render(
           <Route path="/Manager/UsersInfo" element={<UsersInfo />} />
           <Route path="/Manager/CreateNewsForm" element={<CreateNewsForm />} />
           <Route path="/Manager/NewsManager" element={<NewsManager />} />
+          <Route path="/Manager/EditNews" element={<EditNews />} />
         </Route>
       </Routes>
     </BrowserRouter>
