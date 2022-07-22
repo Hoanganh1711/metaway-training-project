@@ -35,7 +35,7 @@ root.render(
           <Route path="/Manager/UsersInfo" element={<UsersInfo />} />
           <Route path="/Manager/CreateNewsForm" element={<CreateNewsForm />} />
           <Route path="/Manager/NewsManager" element={<NewsManager />} />
-          <Route path="/Manager/EditNews" element={<EditNews />} />
+          <Route path="/Manager/EditNews/:params" element={<EditNews />} />
         </Route>
       </Routes>
     </BrowserRouter>

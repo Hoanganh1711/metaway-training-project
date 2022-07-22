@@ -16,7 +16,7 @@ const NewCreateNews = () => {
   const [hotNewsList, setHotNewsList] = useState<any[]>([]);
 
   const hotNewsListAPI = async () => {
-    const url = "https://heroku-manager-news.herokuapp.com/api/test/all";
+    const url = "https://heroku-done-all-manager.herokuapp.com/api/news/user/views";
     const response = await fetch(url);
     const newsData = await response.json();
     console.log(newsData);
@@ -45,7 +45,7 @@ const NewCreateNews = () => {
 
   return (
     <div style={{ margin: "50px auto", width: 900 }}>
-      <p style={{ fontSize: 24, fontWeight: 500 }}>Tin tức nổi bật</p>
+      <p style={{ fontSize: 24, fontWeight: 500 }}>Tin mới nhất</p>
       <>
         <List
           className="hot-news-list"

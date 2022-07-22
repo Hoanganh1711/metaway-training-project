@@ -236,9 +236,14 @@ const NewsManager = () => {
       dataIndex: "action",
       key: "action",
       render: (abc, row) => {
+        console.log('abc', abc);
+        console.log('row', row);
+        
         return (
           <>
-            <Link to="/Manager/EditNews">Edit</Link>
+            <Link to={{
+              pathname: `/Manager/EditNews/${row.id}`
+            }}>Edit</Link>
             <Select defaultValue="Chờ duyệt" style={{ width: 100 }}>
               <Option key="pending" value="pending">Chờ duyệt</Option>
               <Option key="public" value="public">Công khai</Option>

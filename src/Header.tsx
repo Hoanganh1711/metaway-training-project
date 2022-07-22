@@ -30,7 +30,7 @@ const menu = (
         key: "1",
         label: (
           <Link rel="noopener noreferrer" to="/Manager/UsersInfo">
-            <b style={{color: '#3d4d65'}}>Thông tin cá nhân</b>
+            <b style={{ color: '#3d4d65' }}>Thông tin cá nhân</b>
           </Link>
         ),
       },
@@ -38,7 +38,7 @@ const menu = (
         key: "2",
         label: (
           <Link rel="noopener noreferrer" to="/Manager/NewsManager">
-            <b style={{color: '#3d4d65'}}>Quản lý bài viết</b>
+            <b style={{ color: '#3d4d65' }}>Quản lý bài viết</b>
           </Link>
         ),
       },
@@ -46,7 +46,7 @@ const menu = (
         key: "3",
         label: (
           <Link rel="noopener noreferrer" to="/Manager/CreateNewsForm">
-            <b style={{color: '#3d4d65'}}>Thêm bài viết mới</b>
+            <b style={{ color: '#3d4d65' }}>Thêm bài viết mới</b>
           </Link>
         ),
       },
@@ -54,7 +54,7 @@ const menu = (
         key: "4",
         label: (
           <Link onClick={clearToken} rel="noopener noreferrer" to="#">
-            <b style={{color: '#3d4d65'}}>Đăng xuất</b>
+            <b style={{ color: '#3d4d65' }}>Đăng xuất</b>
           </Link>
         ),
       },
@@ -102,18 +102,6 @@ function Header() {
                     size={36}
                     icon={<UserOutlined />}
                   />
-                  <br></br>
-                  <span
-                    style={{
-                      color: "blue",
-                      backgroundColor: "#fff",
-                      borderRadius: 20,
-                      padding: "0 4px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {userName}
-                  </span>
                 </div>
               </Dropdown>
             </div>

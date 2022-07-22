@@ -17,7 +17,7 @@ const HotNews = () => {
   const [hotNewsList, setHotNewsList] = useState<any[]>([]);
 
   const hotNewsListAPI = async () => {
-    const url = "https://heroku-done-all-manager.herokuapp.com/api/news/views";
+    const url = "https://heroku-done-all-manager.herokuapp.com/api/news/user/views";
     const response = await fetch(url);
     const newsData = await response.json();
     console.log(newsData);
