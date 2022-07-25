@@ -135,3 +135,7 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-dark {
 .ql-editor.ql-blank {
   height: 200px;
 }
+
+.ant-select-selector {
+  padding: 5px;
+}

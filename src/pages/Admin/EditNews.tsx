@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { UploadOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Input, Upload } from 'antd'
+import { Button, Col, Form, Input, Select, Upload } from 'antd'
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -9,10 +9,12 @@ import JoditEditor from "jodit-react";
 const EditNews = () => {
 
     const { params } = useParams()
+    const [selectTopic, setSelectTopic] = useState([])
     const [inputTitle, setInputTitle] = useState('')
     const [inputDescription, setInputDescription] = useState('')
     const [content, setContent] = useState('')
     // const [uploadPhoto, setUploatPhoto] = useState([])
+    const [categories, setCategories] = useState([])
 
     const [form] = Form.useForm();
 
@@ -29,8 +31,11 @@ const EditNews = () => {
             }
         )
             .then(response => {
-                console.log(response.data.title);
+                console.log(response.data.description);
+                // console.log(response.data.categories[0].name);
+
                 form.setFieldsValue({
+                    topic: response.data.categories.map((item: any) => item.name),
                     title: response.data.title,
                     description: response.data.description,
                     content: response.data.content
@@ -45,6 +50,21 @@ const EditNews = () => {
         getNewAPI()
     }, [])
 
+    const categoriesAPI = async () => {
+        await axios.get('https://heroku-done-all-manager.herokuapp.com/api/category/user/views')
+            .then(response => {
+                setCategories(response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    useEffect(() => {
+        categoriesAPI()
+        // console.log("categories",categories);
+    }, [])
+
     const normFile = (e: any) => {
         console.log("Upload event:", e);
         console.log(e.file);
@@ -55,6 +75,9 @@ const EditNews = () => {
         }
     };
 
+    const handleSelectTopic = (e: any) => {
+        setSelectTopic(e)
+    }
 
     const handleInputChangeTitle = (e: any) => {
         setInputTitle(e.target.value);
@@ -71,6 +94,7 @@ const EditNews = () => {
     const saveChange = () => {
         axios.put(`https://heroku-done-all-manager.herokuapp.com/api/news/update/${params}`,
             {
+                topic: selectTopic,
                 title: inputTitle,
                 description: inputDescription,
                 content: content,
@@ -81,15 +105,14 @@ const EditNews = () => {
                 }
             }
         )
-        .then(response => {
-            console.log(response);
-        })
-        .catch(error => {
-            console.log(error);
-            
-        })
-    }
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error);
 
+            })
+    }
 
     return (
         <>
@@ -107,6 +130,33 @@ const EditNews = () => {
                             name="validate_other"
                             form={form}
                         >
+                            <Form.Item
+                                name="topic"
+                                // label="Chủ đề:"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Chưa lựa chọn chủ đề',
+                                        type: 'array',
+                                    },
+                                ]}
+                            >
+                                <Select
+                                    mode="multiple"
+                                    placeholder="Lựa chọn chủ đề của bài viết"
+                                    onChange={handleSelectTopic}
+                                >
+                                    {categories.map((categorie: any) => {
+                                        return (
+                                            <>
+                                                <Select.Option key={categorie.index} value={categorie.name}>
+                                                    {categorie.name}
+                                                </Select.Option>
+                                            </>
+                                        )
+                                    })}
+                                </Select>
+                            </Form.Item>
                             <Form.Item
                                 name="title"
                                 rules={[
@@ -167,6 +217,7 @@ const EditNews = () => {
                             </Form.Item>
 
                             <Form.Item
+                                style={{ textAlign: "center" }}
                                 wrapperCol={{
                                     span: 12,
                                     offset: 6,
