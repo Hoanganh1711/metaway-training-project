@@ -10,7 +10,7 @@ const EditNews = () => {
 
     const { params } = useParams()
     const [selectCategories, setSelectCategories] = useState([])
-    const [inputTitle, setInputTitle] = useState('')
+    const [inputChangeTitle, setInputChangeTitle] = useState('')
     const [inputDescription, setInputDescription] = useState('')
     const [changedContent, setChangedContent] = useState('')
     // const [uploadPhoto, setUploatPhoto] = useState([])
@@ -82,7 +82,7 @@ const EditNews = () => {
     }
 
     const handleInputChangeTitle = (e: any) => {
-        setInputTitle(e.target.value);
+        setInputChangeTitle(e.target.value);
     }
 
     const handleInputChangeDescription = (e: any) => {
@@ -97,7 +97,7 @@ const EditNews = () => {
         axios.put(`https://heroku-done-all-manager.herokuapp.com/api/news/update/${params}`,
             {
                 category: selectCategories,
-                title: inputTitle,
+                title: inputChangeTitle,
                 description: inputDescription,
                 content: changedContent,
                 status: false,
