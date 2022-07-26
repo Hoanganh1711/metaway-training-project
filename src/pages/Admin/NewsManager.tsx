@@ -19,7 +19,7 @@ const NewsManager = () => {
         id: any;
         key: React.Key;
         title: string;
-        topics: string;
+        categories: string[];
         date: string;
     }
 
@@ -70,10 +70,11 @@ const NewsManager = () => {
     useEffect(() => {
         categoriesAPI()
     }, [])
+
     // Xóa bài viết
     const deleteOneNew = (index: any, row: any) => {
         newsList.filter((data: any) => {
-            console.log("data", data);
+            // console.log("data", data);
             // const removeItem = data.id !== row.id;
             axios.delete(`https://heroku-done-all-manager.herokuapp.com/api/news/delete/${row.id}`,
                 {
@@ -200,8 +201,8 @@ const NewsManager = () => {
         },
         {
             title: "Chủ đề",
-            dataIndex: "topics",
-            key: "topics",
+            dataIndex: "categories",
+            key: "categories",
             width: "20%",
             filters: categories.map((item: any) => (
                 {
@@ -210,20 +211,43 @@ const NewsManager = () => {
                 }
             )),
             onFilter: (value: any, record: any) => record.topic.indexOf(value) === 0,
-            render: (topics: [], record) => (
+            render: (categories: [], record) => (
                 <>
                     {
-                        topics ? (
-                            // topics.map((topic: any) =>
-                            //     <span>{topic.name}</span>
-                            // )
-                            <span>Test</span>
-                        ) : (
-                            <span></span>
-                        )
+                        categories.map((categorie: any) => {
+                            let color = ""
+                            if (categorie.name === 'HOMEPAGE') {
+                                color = "blue"
+                                categorie.name = "Trang chủ"
+                            } else if (categorie.name === "POLITICAL") {
+                                color = "cyan"
+                                categorie.name = "Chính trị"
+                            } else if (categorie.name === "SOCIAL") {
+                                color = "red"
+                                categorie.name = "Xã hội"
+                            } else if (categorie.name === "ECONOMY") {
+                                color = "yellow"
+                                categorie.name = "Kinh tế"
+                            } else if (categorie.name === "HEALTH") {
+                                color = "pink"
+                                categorie.name = "Sức khỏe"
+                            } else if (categorie.name === "EDUCATION") {
+                                color = "orange"
+                                categorie.name = "Giáo dục"
+                            } else if (categorie.name === "SPORT") {
+                                color = "green"
+                                categorie.name = "Thể thao"
+                            } else {
+                                color = "purple"
+                                categorie.name = "Thế giới"
+                            }
+                            return (
+                                <Tag color={color}>{categorie.name}</Tag>
+                            )
+                        })
                     }
                 </>
-            ),
+            )
         },
         {
             title: "Trạng thái",

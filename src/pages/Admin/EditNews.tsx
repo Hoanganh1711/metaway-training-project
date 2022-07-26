@@ -9,10 +9,10 @@ import JoditEditor from "jodit-react";
 const EditNews = () => {
 
     const { params } = useParams()
-    const [selectTopic, setSelectTopic] = useState([])
+    const [selectCategories, setSelectCategories] = useState([])
     const [inputTitle, setInputTitle] = useState('')
     const [inputDescription, setInputDescription] = useState('')
-    const [content, setContent] = useState('')
+    const [changedContent, setChangedContent] = useState('')
     // const [uploadPhoto, setUploatPhoto] = useState([])
     const [categories, setCategories] = useState([])
 
@@ -35,7 +35,7 @@ const EditNews = () => {
                 // console.log(response.data.categories[0].name);
 
                 form.setFieldsValue({
-                    topic: response.data.categories.map((item: any) => item.name),
+                    category: response.data.categories.map((item: any) => item.name),
                     title: response.data.title,
                     description: response.data.description,
                     content: response.data.content
@@ -76,7 +76,9 @@ const EditNews = () => {
     };
 
     const handleSelectTopic = (e: any) => {
-        setSelectTopic(e)
+        setSelectCategories(e)
+        console.log(e);
+
     }
 
     const handleInputChangeTitle = (e: any) => {
@@ -88,22 +90,24 @@ const EditNews = () => {
     }
 
     const handleInputContent = (e: any) => {
-        setContent(e);
+        setChangedContent(e);
     }
 
     const saveChange = () => {
         axios.put(`https://heroku-done-all-manager.herokuapp.com/api/news/update/${params}`,
             {
-                topic: selectTopic,
+                category: selectCategories,
                 title: inputTitle,
                 description: inputDescription,
-                content: content,
-            },
-            {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem("token")
-                }
+                content: changedContent,
+                status: false,
+                author: "admin2",
+                views: 0
+            }, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem("token")
             }
+        }
         )
             .then(response => {
                 console.log(response);
@@ -131,7 +135,7 @@ const EditNews = () => {
                             form={form}
                         >
                             <Form.Item
-                                name="topic"
+                                name="category"
                                 // label="Chủ đề:"
                                 rules={[
                                     {
@@ -149,7 +153,7 @@ const EditNews = () => {
                                     {categories.map((categorie: any) => {
                                         return (
                                             <>
-                                                <Select.Option key={categorie.index} value={categorie.name}>
+                                                <Select.Option key={categorie.index} value={categorie.name.toLowerCase()}>
                                                     {categorie.name}
                                                 </Select.Option>
                                             </>
@@ -197,7 +201,7 @@ const EditNews = () => {
                             >
                                 <JoditEditor
                                     ref={editor}
-                                    value={content}
+                                    value={changedContent}
                                     onChange={handleInputContent}
                                 />
                             </Form.Item>

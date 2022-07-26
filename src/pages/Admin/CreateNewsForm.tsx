@@ -3,15 +3,14 @@ import { UploadOutlined } from "@ant-design/icons";
 import { Button, Upload } from "antd";
 import "../../index.css";
 import { useEffect, useState } from "react";
-import { UploadFile } from "antd/lib/upload/interface";
+// import { UploadFile } from "antd/lib/upload/interface";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
 import axios from "axios";
-import { url } from "inspector";
 
 const CreateNewsForm = () => {
 
-    const [selectTopic, setSelectTopic] = useState([])
+    const [selectCategories, setSelectCategories] = useState([])
     const [inputTitle, setInputTitle] = useState('')
     const [inputDescription, setInputDescription] = useState('')
     const [inputContent, setInputContent] = useState('')
@@ -31,7 +30,6 @@ const CreateNewsForm = () => {
 
     useEffect(() => {
         categoriesAPI()
-        console.log("categories",categories);
     }, [])
 
     const { quill, quillRef } = useQuill();
@@ -56,12 +54,12 @@ const CreateNewsForm = () => {
 
     const CreateNews = () => {
         axios.post('https://heroku-done-all-manager.herokuapp.com/api/news/create', {
-            topic: selectTopic,
+            category: selectCategories,
             title: inputTitle,
             description: inputDescription,
             content: inputContent,
             // img: uploadPhoto,
-            status: true,
+            status: false,
             author: "admin2",
             views: 0
         }, {
@@ -77,10 +75,14 @@ const CreateNewsForm = () => {
             })
     }
 
-    const handleSelectTopic = (e: any) => {
-        setSelectTopic(e)
-        // console.log(typeof e);
+    const handleSelectCategories = (e: any) => {
+        setSelectCategories(e)
     }
+
+    useEffect(() => {
+        console.log("selectCategories", selectCategories);
+        
+    }, [selectCategories])
 
     const handleInputTitle = (e: any) => {
         setInputTitle(e.target.value);
@@ -123,12 +125,12 @@ const CreateNewsForm = () => {
                             <Select
                                 mode="multiple"
                                 placeholder="Lựa chọn chủ đề của bài viết"
-                                onChange={handleSelectTopic}
+                                onChange={handleSelectCategories}
                             >
                                 {categories.map((categorie: any) => {
                                     return (
                                         <>
-                                            <Select.Option key={categorie.index} value={categorie.name}>
+                                            <Select.Option key={categorie.index} value={categorie.name.toLowerCase()}>
                                                 {categorie.name}
                                             </Select.Option>
                                         </>
