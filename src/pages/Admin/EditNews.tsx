@@ -1,10 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { UploadOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Input, Select, Upload } from 'antd'
+import { Button, Col, Form, Input, Row, Select, Upload } from 'antd'
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { message } from 'antd';
+import type { UploadChangeParam } from 'antd/es/upload';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import JoditEditor from "jodit-react";
+
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result as string));
+    reader.readAsDataURL(img);
+};
+
+const beforeUpload = (file: RcFile) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+        message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+};
 
 const EditNews = () => {
 
@@ -15,6 +37,31 @@ const EditNews = () => {
     const [changedContent, setChangedContent] = useState('')
     // const [uploadPhoto, setUploatPhoto] = useState([])
     const [categories, setCategories] = useState([])
+
+    const [loading, setLoading] = useState(false);
+    const [imageUrl, setImageUrl] = useState<string>();
+
+    const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
+        if (info.file.status === 'uploading') {
+            setLoading(true);
+            return;
+        }
+        if (info.file.status === 'done') {
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj as RcFile, url => {
+                setLoading(false);
+                setImageUrl(url);
+            });
+        }
+    };
+
+    const uploadButton = (
+        <div>
+            {loading ? <LoadingOutlined /> : <PlusOutlined />}
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+    );
+
 
     const [form] = Form.useForm();
 
@@ -62,7 +109,7 @@ const EditNews = () => {
 
     useEffect(() => {
         categoriesAPI()
-        // console.log("categories",categories);
+        console.log("categories", categories);
     }, [])
 
     const normFile = (e: any) => {
@@ -96,13 +143,11 @@ const EditNews = () => {
     const saveChange = () => {
         axios.put(`https://heroku-done-all-manager.herokuapp.com/api/news/update/${params}`,
             {
-                category: selectCategories,
+                categories: selectCategories,
                 title: inputChangeTitle,
                 description: inputDescription,
                 content: changedContent,
-                status: false,
                 author: "admin2",
-                views: 0
             }, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem("token")
@@ -120,7 +165,7 @@ const EditNews = () => {
 
     return (
         <>
-            <Col span={12} style={{ margin: "0 auto" }}>
+            <Col span={16} style={{ margin: "0 auto" }}>
                 <h2>Sửa bài viết</h2>
                 <div
                     style={{
@@ -129,110 +174,129 @@ const EditNews = () => {
                         borderRadius: 10,
                     }}
                 >
-                    <div>
-                        <Form
-                            name="validate_other"
-                            form={form}
+                    <Form
+                        name="validate_other"
+                        layout="vertical"
+                        form={form}
+                    >
+                        <Form.Item
+                            name="category"
+                            label="Chủ đề:"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Chưa lựa chọn chủ đề',
+                                    type: 'array',
+                                },
+                            ]}
                         >
-                            <Form.Item
-                                name="category"
-                                // label="Chủ đề:"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Chưa lựa chọn chủ đề',
-                                        type: 'array',
-                                    },
-                                ]}
+                            <Select
+                                mode="multiple"
+                                placeholder="Lựa chọn chủ đề của bài viết"
+                                onChange={handleSelectTopic}
                             >
-                                <Select
-                                    mode="multiple"
-                                    placeholder="Lựa chọn chủ đề của bài viết"
-                                    onChange={handleSelectTopic}
-                                >
-                                    {categories.map((categorie: any) => {
-                                        return (
-                                            <>
-                                                <Select.Option key={categorie.index} value={categorie.name.toLowerCase()}>
-                                                    {categorie.name}
-                                                </Select.Option>
-                                            </>
-                                        )
-                                    })}
-                                </Select>
-                            </Form.Item>
-                            <Form.Item
-                                name="title"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Hãy nhập tiêu đề của bài viết!",
-                                    },
-                                ]}
-                            >
-                                <Input
-                                    placeholder="Nhập tiêu đề bài viết"
-                                    onChange={handleInputChangeTitle}
-                                />
-                            </Form.Item>
+                                {categories.map((categorie: any) => {
+                                    return (
+                                        <>
+                                            <Select.Option key={categorie.index} value={categorie.name.toLowerCase()}>
+                                                {categorie.name}
+                                            </Select.Option>
+                                        </>
+                                    )
+                                })}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            name="title"
+                            label="Tiêu đề"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Hãy nhập tiêu đề của bài viết!",
+                                },
+                            ]}
+                        >
+                            <Input
+                                placeholder="Nhập tiêu đề bài viết"
+                                onChange={handleInputChangeTitle}
+                            />
+                        </Form.Item>
 
-                            <Form.Item
-                                name="description"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Hãy nhập mô tả của bài viết!",
-                                    },
-                                ]}>
-                                <Input
-                                    placeholder='Nhập mô tả'
-                                    onChange={handleInputChangeDescription}
-                                />
-                            </Form.Item>
+                        <Form.Item
+                            name="description"
+                            label="Mô tả:"
+                        // rules={[
+                        //     {
+                        //         required: true,
+                        //         message: "Hãy nhập mô tả của bài viết!",
+                        //     },
+                        // ]}
+                        >
+                            <Input
+                                placeholder='Nhập mô tả'
+                                onChange={handleInputChangeDescription}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="content"
+                            label="Nội dung bài viết:"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Hãy nhập nội dung của bài viết!",
+                                },
+                            ]}
+                        >
+                            <JoditEditor
+                                ref={editor}
+                                value={changedContent}
+                                onChange={handleInputContent}
+                            />
+                        </Form.Item>
 
-                            <Form.Item
-                                name="content"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Hãy nhập nội dung của bài viết!",
-                                    },
-                                ]}
-                            >
-                                <JoditEditor
-                                    ref={editor}
-                                    value={changedContent}
-                                    onChange={handleInputContent}
-                                />
-                            </Form.Item>
-
+                        <Row style={{ justifyContent: "space-around" }}>
                             <Form.Item
                                 name="upload"
+                                label="Ảnh minh họa:"
                                 valuePropName="fileList"
                                 getValueFromEvent={normFile}
                             >
                                 <Upload
+                                    name="avatar"
+                                    listType="picture-card"
+                                    className="avatar-uploader"
+                                    showUploadList={false}
                                     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                    listType="picture"
-                                    className="upload-list-inline"
+                                    beforeUpload={beforeUpload}
+                                    onChange={handleChange}
                                 >
-                                    <Button icon={<UploadOutlined />}>Thêm ảnh</Button>
+                                    {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
                                 </Upload>
                             </Form.Item>
 
                             <Form.Item
-                                style={{ textAlign: "center" }}
-                                wrapperCol={{
-                                    span: 12,
-                                    offset: 6,
-                                }}
+                                name="status"
+                                label="Trạng thái:"
                             >
-                                <Button type="primary" htmlType="submit" onClick={saveChange}>
-                                    Lưu thay đổi
-                                </Button>
+                                <Select defaultValue="Chờ duyệt" style={{ width: 200 }}>
+                                    <Select.Option key="pending" value="pending">Chờ duyệt</Select.Option>
+                                    <Select.Option key="public" value="public">Công khai</Select.Option>
+                                </Select>
                             </Form.Item>
-                        </Form>
-                    </div>
+                        </Row>
+
+                        <Form.Item
+                            style={{ textAlign: "center" }}
+                            wrapperCol={{
+                                span: 12,
+                                offset: 6,
+                            }}
+                        >
+                            <Button type="primary" htmlType="submit" onClick={saveChange}>
+                                Lưu thay đổi
+                            </Button>
+                        </Form.Item>
+                    </Form>
                 </div>
             </Col>
         </>

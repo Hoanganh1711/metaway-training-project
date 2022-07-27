@@ -47,7 +47,7 @@ const NewsManager = () => {
     }
 
     useEffect(() => {
-        newsListAPI();
+
     }, []);
 
 
@@ -68,6 +68,7 @@ const NewsManager = () => {
     }
 
     useEffect(() => {
+        newsListAPI();
         categoriesAPI()
     }, [])
 
@@ -204,10 +205,10 @@ const NewsManager = () => {
             dataIndex: "categories",
             key: "categories",
             width: "20%",
-            filters: categories.map((item: any) => (
+            filters: categories.map((categorie: any) => (
                 {
-                    text: item.name,
-                    value: item.name
+                    text: categorie.name,
+                    value: categorie.name
                 }
             )),
             onFilter: (value: any, record: any) => record.topic.indexOf(value) === 0,
@@ -234,6 +235,9 @@ const NewsManager = () => {
                             } else if (categorie.name === "EDUCATION") {
                                 color = "orange"
                                 categorie.name = "Giáo dục"
+                            } else if (categorie.name === "LAW") {
+                                color = "geekblue"
+                                categorie.name = "Pháp luật"
                             } else if (categorie.name === "SPORT") {
                                 color = "green"
                                 categorie.name = "Thể thao"
@@ -248,6 +252,12 @@ const NewsManager = () => {
                     }
                 </>
             )
+        },
+        {
+            title: "Ngày đăng",
+            dataIndex: "createdAt",
+            key: "createdAt",
+            sortDirections: ["descend", "ascend"],
         },
         {
             title: "Trạng thái",
@@ -278,12 +288,6 @@ const NewsManager = () => {
             )
         },
         {
-            title: "Ngày đăng",
-            dataIndex: "createdAt",
-            key: "createdAt",
-            sortDirections: ["descend", "ascend"],
-        },
-        {
             title: "Xử lý",
             dataIndex: "action",
             key: "action",
@@ -293,10 +297,6 @@ const NewsManager = () => {
 
                 return (
                     <Row style={{ justifyContent: 'space-around', alignItems: "center" }}>
-                        <Select defaultValue="Chờ duyệt" style={{ width: 100 }}>
-                            <Option key="pending" value="pending">Chờ duyệt</Option>
-                            <Option key="public" value="public">Công khai</Option>
-                        </Select>
                         <Link key={row.id} to={{ pathname: `/Manager/EditNews/${row.id}` }}>
                             Chỉnh sửa
                         </Link>
