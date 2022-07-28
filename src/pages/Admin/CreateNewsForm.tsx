@@ -1,12 +1,31 @@
 import { Col, Form, Input, Select } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, Upload } from "antd";
+import { UploadOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Upload, message } from "antd";
 import "../../index.css";
 import { useEffect, useState } from "react";
-// import { UploadFile } from "antd/lib/upload/interface";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
 import axios from "axios";
+import type { UploadChangeParam } from 'antd/es/upload';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result as string));
+    reader.readAsDataURL(img);
+};
+
+const beforeUpload = (file: RcFile) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+        message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+};
 
 const CreateNewsForm = () => {
 
@@ -14,8 +33,10 @@ const CreateNewsForm = () => {
     const [inputTitle, setInputTitle] = useState('')
     const [inputDescription, setInputDescription] = useState('')
     const [inputContent, setInputContent] = useState('')
-    const [uploadPhoto, setUploatPhoto] = useState([])
     const [categories, setCategories] = useState([])
+
+    const [loading, setLoading] = useState(false);
+    const [imageUrl, setImageUrl] = useState<string>();
 
     const categoriesAPI = async () => {
         await axios.get('https://heroku-done-all-manager.herokuapp.com/api/category/user/views')
@@ -58,7 +79,7 @@ const CreateNewsForm = () => {
             title: inputTitle,
             description: inputDescription,
             content: inputContent,
-            // img: uploadPhoto,
+            img: imageUrl,
             status: false,
             author: "admin2",
             views: 0
@@ -81,7 +102,7 @@ const CreateNewsForm = () => {
 
     useEffect(() => {
         console.log("selectCategories", selectCategories);
-        
+
     }, [selectCategories])
 
     const handleInputTitle = (e: any) => {
@@ -92,9 +113,29 @@ const CreateNewsForm = () => {
         setInputDescription(e.target.value);
     };
 
-    const handleUploadPhoto = (e: any) => {
-        setUploatPhoto(e);
+    const handleUploadPhoto: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
+        if (info.file.status === 'uploading') {
+            setLoading(true);
+            return;
+        }
+        if (info.file.status === 'done') {
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj as RcFile, url => {
+                setLoading(false);
+                setImageUrl(url);
+            });
+        }
     };
+    console.log("imgUrl", imageUrl);
+
+
+    const uploadButton = (
+        <div>
+            {loading ? <LoadingOutlined /> : <PlusOutlined />}
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+    );
+
 
     return (
         <Col span={15} style={{ margin: "0 auto 0 auto" }}>
@@ -178,16 +219,20 @@ const CreateNewsForm = () => {
 
                         <Form.Item
                             name="upload"
+                            label="Thêm ảnh minh họa:"
                             valuePropName="fileList"
                             getValueFromEvent={normFile}
                         >
                             <Upload
+                                name="avatar"
+                                listType="picture-card"
+                                className="avatar-uploader"
+                                showUploadList={false}
                                 action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                listType="picture"
-                                className="upload-list-inline"
+                                beforeUpload={beforeUpload}
                                 onChange={handleUploadPhoto}
                             >
-                                <Button icon={<UploadOutlined />}>Thêm ảnh</Button>
+                                {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
                             </Upload>
                         </Form.Item>
 

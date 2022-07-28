@@ -40,7 +40,7 @@ const EditNews = () => {
 
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>();
-
+    
     const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
         if (info.file.status === 'uploading') {
             setLoading(true);
@@ -79,10 +79,11 @@ const EditNews = () => {
         )
             .then(response => {
                 console.log(response.data.description);
+                console.log(response.data.categorie);
                 // console.log(response.data.categories[0].name);
 
                 form.setFieldsValue({
-                    category: response.data.categories.map((item: any) => item.name),
+                    category: response.data.categories.map((item: any) => item.id),
                     title: response.data.title,
                     description: response.data.description,
                     content: response.data.content
@@ -125,8 +126,8 @@ const EditNews = () => {
     const handleSelectTopic = (e: any) => {
         setSelectCategories(e)
         console.log(e);
-
     }
+    console.log("selectCategories",selectCategories);
 
     const handleInputChangeTitle = (e: any) => {
         setInputChangeTitle(e.target.value);
@@ -143,7 +144,11 @@ const EditNews = () => {
     const saveChange = () => {
         axios.put(`https://heroku-done-all-manager.herokuapp.com/api/news/update/${params}`,
             {
-                categories: selectCategories,
+                categories: selectCategories.map((category: any) => {
+                    return(
+                        {id: category}
+                    )
+                }),
                 title: inputChangeTitle,
                 description: inputDescription,
                 content: changedContent,
@@ -198,7 +203,7 @@ const EditNews = () => {
                                 {categories.map((categorie: any) => {
                                     return (
                                         <>
-                                            <Select.Option key={categorie.index} value={categorie.name.toLowerCase()}>
+                                            <Select.Option key={categorie.index} value={categorie.id}>
                                                 {categorie.name}
                                             </Select.Option>
                                         </>

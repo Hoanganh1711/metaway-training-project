@@ -27,7 +27,7 @@ function SignIn() {
     const logInApi = (userName: string, passWord: string) => {
         axios.post('https://heroku-done-all-manager.herokuapp.com/api/auth/signin', {
             username: userName,
-            password: passWord,  
+            password: passWord,
         })
             .then(response => {
                 // const history = useHistory()
@@ -58,13 +58,16 @@ function SignIn() {
             <Form
                 name="normal_login"
                 className="signin-form"
+                layout="vertical"
                 initialValues={{
                     remember: true,
                 }}
                 onFinish={onFinish}
             >
+                <h2 className='form-heading'>LOGIN</h2>
                 <Form.Item
                     name="username"
+                    label="Username"
                     rules={[
                         {
                             required: true,
@@ -72,10 +75,11 @@ function SignIn() {
                         },
                     ]}
                 >
-                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Type your username" />
                 </Form.Item>
                 <Form.Item
                     name="password"
+                    label="Password"
                     rules={[
                         {
                             required: true,
@@ -86,25 +90,18 @@ function SignIn() {
                     <Input
                         prefix={<LockOutlined className="site-form-item-icon" />}
                         type="password"
-                        placeholder="Password"
+                        placeholder="Type your Password"
                     />
                 </Form.Item>
 
                 <span className='error' style={{ color: "red " }}>
                     {error}
                 </span>
+                <div className='forgot-pass'>
+                    <Link to="#" >Forgot password?</Link>
+                </div>
 
-                {/* <Form.Item>
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox>Remember me</Checkbox>
-                    </Form.Item>
-
-                    <a className="login-form-forgot" href="">
-                        Forgot password
-                    </a>
-                </Form.Item> */}
-
-                <Form.Item style={{textAlign: "center"}}>
+                <Form.Item style={{ textAlign: "center" }}>
                     <Button type="primary" htmlType="submit" className="login-form-button">
                         Log in
                     </Button>

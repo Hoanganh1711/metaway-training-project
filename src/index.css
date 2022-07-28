@@ -30,6 +30,11 @@ code {
   height: auto;
 }
 
+.form-heading {
+  font-weight: 700;
+  text-align: center;
+}
+
 .login-box,
 .logout-box {
   display: flex;
@@ -57,12 +62,34 @@ code {
 }
 
 form#normal_login{
-  max-width: 300px;
+  /* text-align: center; */
+  max-width: 400px;
   background-color: #fff;
-  padding: 30px 20px;
+  padding: 40px 24px;
   margin: 100px auto;
   border: solid 1px #ccc;
   border-radius: 10px;
+}
+
+.ant-row.ant-form-item {
+  margin-top: 24px;
+}
+
+span.ant-input-affix-wrapper {
+  border-bottom: solid 1px #ccc;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding-bottom: 10px;
+}
+
+button.ant-btn.ant-btn-primary.login-form-button {
+  width: 80%;
+  border-radius: 50px;
+}
+
+.forgot-pass {
+  text-align: right;
 }
 
 form#register {
