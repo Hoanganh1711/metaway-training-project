@@ -56,7 +56,7 @@ const HotNews = () => {
                         onChange: (page) => {
                             console.log(page);
                         },
-                        pageSize: 5,
+                        pageSize: 12,
                     }}
                     dataSource={hotNewsList}
                     renderItem={(item, index) => (

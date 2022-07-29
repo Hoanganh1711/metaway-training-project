@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
-import { LoadingOutlined, LockOutlined, UserOutlined, WindowsFilled } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { LoadingOutlined, LockOutlined, UserOutlined, WindowsFilled, FacebookFilled, TwitterCircleFilled, GoogleCircleFilled } from '@ant-design/icons';
+import { Button, Checkbox, Form, Input, Row } from 'antd';
 import "../../index.css"
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -103,10 +103,22 @@ function SignIn() {
 
                 <Form.Item style={{ textAlign: "center" }}>
                     <Button type="primary" htmlType="submit" className="login-form-button">
-                        Log in
+                        LOGIN
                     </Button>
                 </Form.Item>
-                Hoặc <Link to="/signUp">đăng ký ngay</Link>
+                
+                <div style={{textAlign: "center"}}>
+                    <p style={{fontSize: 12, marginBottom: 0}}>Or Sign Up Using</p>
+                    <Row style={{justifyContent: "center", fontSize: 32}}>
+                        <Link to="#" className='social-icon'><FacebookFilled style={{color: "#415994"}}/></Link> 
+                        <Link to="#" className='social-icon'><TwitterCircleFilled style={{color: "#46a1e7"}}/></Link> 
+                        <Link to="#" className='social-icon'><GoogleCircleFilled style={{color: "#db5141"}}/></Link> 
+                    </Row>
+                </div>
+                <div style={{fontSize: 12, textAlign: "center", marginTop: 50}}>
+                    <p style={{marginBottom: 0}}>Or Sign Up Using</p>
+                    <Link to="/signUp">SIGN UP</Link>
+                </div>
             </Form>
         </>
     )

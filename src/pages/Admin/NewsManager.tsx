@@ -16,15 +16,13 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Spin } from 'antd';
 
-const { Option } = Select;
-
 const NewsManager = () => {
     interface DataType {
         id: any;
         key: React.Key;
         title: string;
-        categories: string[];
-        status: string;
+        categories: [];
+        status: boolean;
         date: string;
     }
 
@@ -36,25 +34,27 @@ const NewsManager = () => {
     const [categories, setCategories] = useState([]);
 
     const newsListAPI = () => {
-        axios
-            .get(
-                "https://heroku-done-all-manager.herokuapp.com/api/news/manager/views",
-                {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token"),
-                    },
-                }
-            )
+        axios.get("https://heroku-done-all-manager.herokuapp.com/api/news/manager/views",
+            {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            }
+        )
             .then(function (response) {
-                console.log(response.data);
+                console.log("response.data", response.data);
+                // const newArray: any = []
+                // response.data.forEach((element: any) => {
+                //     const newObj = { ...element, key: element.id }
+                //     newArray.push(newObj)
+                // });
+                // console.log({ newArray });
                 setNewsList(response.data);
             })
             .catch(function (error) {
                 console.log(error);
             });
     };
-
-    useEffect(() => { }, []);
 
     const categoriesAPI = () => {
         axios
@@ -67,7 +67,7 @@ const NewsManager = () => {
                 }
             )
             .then(function (response) {
-                console.log(response.data);
+                console.log(response.data, 'Categories');
                 setCategories(response.data);
             })
             .catch(function (error) {
@@ -223,48 +223,42 @@ const NewsManager = () => {
             dataIndex: "categories",
             key: "categories",
             width: "20%",
-            filters: categories.map((categorie: any) => ({
-                text: categorie.name,
-                value: categorie.name,
+            filters: categories.map((category: any) => ({
+                text: category.name,
+                value: category.name,
             })),
-            onFilter: (value: any, record: any) =>
-                record.categories.indexOf(value) === 0,
+            onFilter: (value: any, record: any) => {
+                console.log(record.categories, 'abctesting');
+
+                return record.categories.find((category: any) => category.name === value)
+            },
             render: (categories: []) => (
                 <>
-                    {categories.map((categorie: any, index:any) => {
+                    {categories.map((categorie: any, index: any) => {
                         let color = "";
                         if (categorie.name === "HOMEPAGE") {
                             color = "blue";
-                            categorie.name = "Trang chủ";
                         } else if (categorie.name === "POLITICAL") {
                             color = "cyan";
-                            categorie.name = "Chính trị";
                         } else if (categorie.name === "SOCIAL") {
                             color = "red";
-                            categorie.name = "Xã hội";
                         } else if (categorie.name === "ECONOMY") {
                             color = "yellow";
-                            categorie.name = "Kinh tế";
                         } else if (categorie.name === "HEALTH") {
                             color = "pink";
-                            categorie.name = "Sức khỏe";
                         } else if (categorie.name === "EDUCATION") {
                             color = "orange";
-                            categorie.name = "Giáo dục";
                         } else if (categorie.name === "LAW") {
                             color = "geekblue";
-                            categorie.name = "Pháp luật";
                         } else if (categorie.name === "SPORT") {
                             color = "green";
-                            categorie.name = "Thể thao";
                         } else if (categorie.name === "WORLD") {
                             color = "purple";
-                            categorie.name = "Thế giới";
                         }
-                        return <Tag key={index} color={color}>{categorie.name}</Tag>;
+                        return <Tag color={color} key={index}>{categorie.name}</Tag>;
                     })}
                 </>
-            ),
+            )
         },
         {
             title: "Ngày đăng",
@@ -280,17 +274,20 @@ const NewsManager = () => {
             width: "12%",
             filters: [
                 {
-                    text: "Chờ duyệt",
-                    value: "Chờ duyệt",
+                    text: "Công khai",
+                    value: true,
                 },
                 {
-                    text: "Công khai",
-                    value: "Công khai",
+                    text: "Chờ duyệt",
+                    value: false,
                 },
             ],
-            onFilter: (value: any, record: any) => record.status.indexOf(value) === 0,
-            render: (status: string, record) => (
-                <>{status ? <span>Chờ Duyệt</span> : <span>Công Khai</span>}</>
+            onFilter: (value: any, record) => {
+                console.log(record, 'record testtest');
+                return value ? record.status : !record.status
+            },
+            render: (status: string) => (
+                <>{status ? <div key="public">Công khai</div> : <div key="hiding">Chờ duyệt</div>}</>
             ),
         },
         {

@@ -58,7 +58,7 @@ code {
 }
 
 .register-btn {
-  margin-left: 5px;
+  /* margin-left: 5px; */
 }
 
 form#normal_login{
@@ -88,17 +88,25 @@ button.ant-btn.ant-btn-primary.login-form-button {
   border-radius: 50px;
 }
 
+.social-icon {
+  margin: 0 10px;
+}
+
 .forgot-pass {
   text-align: right;
 }
 
 form#register {
-  width: 500px;
+  max-width: 450px;
   background-color: #fff;
-  padding: 50px 20px 30px 0px;
+  padding: 40px 24px;
   margin: 100px auto;
   border: solid 1px #ccc;
   border-radius: 10px;
+}
+
+.signup-form {
+  margin: 0 auto
 }
 
 .hot-news-list {
