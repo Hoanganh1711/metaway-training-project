@@ -35,8 +35,8 @@ const EditNews = () => {
     const [inputChangeTitle, setInputChangeTitle] = useState('')
     const [inputDescription, setInputDescription] = useState('')
     const [changedContent, setChangedContent] = useState('')
-    // const [uploadPhoto, setUploatPhoto] = useState([])
     const [categories, setCategories] = useState([])
+    const [selectChangeStatus, setSelectChangeStatus] = useState(true)
 
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>();
@@ -46,6 +46,7 @@ const EditNews = () => {
             setLoading(true);
             return;
         }
+
         if (info.file.status === 'done') {
             // Get this url from response in real world.
             getBase64(info.file.originFileObj as RcFile, url => {
@@ -80,13 +81,16 @@ const EditNews = () => {
             .then(response => {
                 console.log(response.data.description);
                 console.log(response.data.categorie);
-                // console.log(response.data.categories[0].name);
+                // console.log("img test" ,response.data.img);
+                setImageUrl(response.data.img)
+                
 
                 form.setFieldsValue({
                     category: response.data.categories.map((item: any) => item.id),
                     title: response.data.title,
                     description: response.data.description,
-                    content: response.data.content
+                    content: response.data.content,
+                    img: response.data.img
                 });
             })
             .catch(error => {
@@ -141,6 +145,14 @@ const EditNews = () => {
         setChangedContent(e);
     }
 
+    const handleSelectChangeStatus = (e: any) => {
+        console.log(e);
+        
+        if(e === "pending") {
+            setSelectChangeStatus(false)
+        }
+    }
+
     const saveChange = () => {
         axios.put(`https://heroku-done-all-manager.herokuapp.com/api/news/update/${params}`,
             {
@@ -153,13 +165,15 @@ const EditNews = () => {
                 description: inputDescription,
                 content: changedContent,
                 author: "admin2",
+                img: imageUrl,
+                status: selectChangeStatus
             }, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem("token")
             }
         }
         )
-            .then(response => {
+            .then(response => {  
                 console.log(response);
             })
             .catch(error => {
@@ -283,7 +297,7 @@ const EditNews = () => {
                                 name="status"
                                 label="Trạng thái:"
                             >
-                                <Select defaultValue="Chờ duyệt" style={{ width: 200 }}>
+                                <Select defaultValue="Chờ duyệt" style={{ width: 200 }} onSelect={handleSelectChangeStatus}>
                                     <Select.Option key="pending" value="pending">Chờ duyệt</Select.Option>
                                     <Select.Option key="public" value="public">Công khai</Select.Option>
                                 </Select>

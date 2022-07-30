@@ -20,7 +20,7 @@ const beforeUpload = (file: RcFile) => {
     if (!isJpgOrPng) {
         message.error('You can only upload JPG/PNG file!');
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
+    const isLt2M = file.size / 309367 / 309367 < 2;
     if (!isLt2M) {
         message.error('Image must smaller than 2MB!');
     }
@@ -139,7 +139,7 @@ const CreateNewsForm = () => {
 
     return (
         <Col span={15} style={{ margin: "0 auto 0 auto" }}>
-            <h2>Tạo bài viết</h2>
+            <h2>Đăng bài viết</h2>
             <div
                 style={{
                     backgroundColor: "#fff",
