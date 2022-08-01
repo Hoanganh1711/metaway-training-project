@@ -2,12 +2,13 @@ import { Col, Form, Input, Select } from "antd";
 import { UploadOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Upload, message } from "antd";
 import "../../index.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
 import axios from "axios";
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import JoditEditor from "jodit-react";
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
@@ -20,14 +21,15 @@ const beforeUpload = (file: RcFile) => {
     if (!isJpgOrPng) {
         message.error('You can only upload JPG/PNG file!');
     }
-    const isLt2M = file.size / 309367 / 309367 < 2;
+    const isLt2M = file.size / 1024 / 1024 < 4;
     if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
+        message.error('Image must smaller than 3MB!');
     }
     return isJpgOrPng && isLt2M;
 };
 
 const CreateNewsForm = () => {
+    const editor = useRef(null)
 
     const [selectCategories, setSelectCategories] = useState([])
     const [inputTitle, setInputTitle] = useState('')
@@ -53,14 +55,14 @@ const CreateNewsForm = () => {
         categoriesAPI()
     }, [])
 
-    const { quill, quillRef } = useQuill();
-    useEffect(() => {
-        if (quill) {
-            quill.on("text-change", (delta: any, oldDelta: any, source: any) => {
-                setInputContent(quill.getText())
-            });
-        }
-    }, [quill]);
+    // const { quill, quillRef } = useQuill();
+    // useEffect(() => {
+    //     if (quill) {
+    //         quill.on("text-change", (delta: any, oldDelta: any, source: any) => {
+    //             setInputContent(quill.getText())
+    //         });
+    //     }
+    // }, [quill]);
 
 
     const normFile = (e: any) => {
@@ -112,6 +114,10 @@ const CreateNewsForm = () => {
     const handleInputDescription = (e: any) => {
         setInputDescription(e.target.value);
     };
+
+    const handleInputContent = (e: any) => {
+        setInputContent(e)
+    }
 
     const handleUploadPhoto: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
         if (info.file.status === 'uploading') {
@@ -170,11 +176,9 @@ const CreateNewsForm = () => {
                             >
                                 {categories.map((categorie: any) => {
                                     return (
-                                        <>
-                                            <Select.Option key={categorie.index} value={categorie.name.toLowerCase()}>
-                                                {categorie.name}
-                                            </Select.Option>
-                                        </>
+                                        <Select.Option key={categorie.name} value={categorie.name.toLowerCase()}>
+                                            {categorie.name}
+                                        </Select.Option>
                                     )
                                 })}
                             </Select>
@@ -199,7 +203,6 @@ const CreateNewsForm = () => {
                         <Form.Item
                             name="description"
                             label="Mô tả:"
-                        // rules={[{ required: true, message: 'Hãy nhập mô tả của bài viết!' }]}
                         >
                             <Input.TextArea onChange={handleInputDescription} maxLength={1000} />
                         </Form.Item>
@@ -214,7 +217,11 @@ const CreateNewsForm = () => {
                                 },
                             ]}
                         >
-                            <div ref={quillRef} />
+                            <JoditEditor
+                                ref={editor}
+                                onChange={handleInputContent}
+                                value={inputContent}
+                            />
                         </Form.Item>
 
                         <Form.Item

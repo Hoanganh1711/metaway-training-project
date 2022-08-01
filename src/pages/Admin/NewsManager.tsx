@@ -216,7 +216,15 @@ const NewsManager = () => {
             key: "title",
             width: "20%",
             ...getColumnSearchProps("title"),
-            render: (text: string) => <Link to="#">{text}</Link>,
+            render: (text: string, row) => {
+                return (
+                    <Row style={{ alignItems: "center" }}>
+                        <Link key={row.id} to={{ pathname: `/Manager/check/news/${row.id}` }}>
+                            {text}
+                        </Link>
+                    </Row>
+                );
+            },
         },
         {
             title: "Chủ đề",

@@ -36,9 +36,8 @@ function SignIn() {
                 const token = response.data.token
                 setToken(token)
                 localStorage.setItem('token', token)
-                // localStorage.setItem('name', response.data.username)
-                // localStorage.setItem('email', response.data.email)
                 localStorage.setItem('roles', response.data.roles[0])
+                localStorage.setItem('id', response.data.id)
                 console.log(response.data.roles[0]);
 
                 setTimeout(() => {

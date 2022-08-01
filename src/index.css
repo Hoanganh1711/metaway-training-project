@@ -50,7 +50,6 @@ code {
   border-radius: 5px;
 }
 
-.logout-btn:hover,
 .login-btn:hover {
   color: #fff;
   background-color: blue;
@@ -76,11 +75,11 @@ form#normal_login{
 }
 
 span.ant-input-affix-wrapper {
-  border-bottom: solid 1px #ccc;
+  /* border-bottom: solid 1px #ccc;
   border-top: none;
   border-left: none;
-  border-right: none;
-  padding-bottom: 10px;
+  border-right: none; */
+  /* padding-bottom: 10px; */
 }
 
 button.ant-btn.ant-btn-primary.login-form-button {
@@ -96,8 +95,8 @@ button.ant-btn.ant-btn-primary.login-form-button {
   text-align: right;
 }
 
-form#register {
-  max-width: 450px;
+form#horizontal_login {
+  max-width: 550px;
   background-color: #fff;
   padding: 40px 24px;
   margin: 100px auto;
@@ -173,4 +172,23 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-dark {
 
 .ant-select-selector {
   padding: 5px;
+}
+
+/* Check News Css */
+.news-container {
+  background-color: #fff;
+  padding: 30px 40px;
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+.description,
+.content {
+  font-size: 16px;
+}
+
+.author {
+  margin-top: 10px;
+  text-align: right;
+  font-size: 16px;
 }

@@ -30,10 +30,10 @@ const ManagerSidebar = () => {
             title: "Admin",
             children: [
                 {
-                    key: "AdminInfo",
+                    key: "myinfo",
                     icon: <IdcardOutlined />,
                     title: "Thông tin cá nhân",
-                    link: "./UsersInfo"
+                    link: "./MyInfo"
                 },
                 {
                     key: "manager",

@@ -9,12 +9,13 @@ import SignUp from "./pages/homePageList/SignUpForm";
 import HomePageContent from "./pages/homePageList/HomePageContent";
 import ShowNews from "./pages/homePageList/ShowNews";
 import Manager from "./pages/Admin/Manager";
-import UsersInfo from "./pages/Admin/UsersInfo";
+import UsersInfo from "./pages/Admin/MyInfo";
 import CreateNewsForm from "./pages/Admin/CreateNewsForm";
 import NewsManager from "./pages/Admin/NewsManager";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import EditNews from "./pages/Admin/EditNews";
+import CheckViewNews from "./pages/Admin/CheckViewNews";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -29,13 +30,12 @@ root.render(
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/showNews" element={<ShowNews />} />
         </Route>
-      </Routes>
-      <Routes>
         <Route path="/Manager" element={localStorage.getItem("roles") === "ROLE_ADMIN" ? <Manager /> : <Navigate to="/" />}>
-          <Route path="/Manager/UsersInfo" element={<UsersInfo />} />
+          <Route path="/Manager/MyInfo" element={<UsersInfo />} />
           <Route path="/Manager/CreateNewsForm" element={<CreateNewsForm />} />
           <Route path="/Manager/NewsManager" element={<NewsManager />} />
           <Route path="/Manager/EditNews/:params" element={<EditNews />} />
+          <Route path="/Manager/check/news/:params" element={<CheckViewNews />} />
         </Route>
       </Routes>
     </BrowserRouter>
