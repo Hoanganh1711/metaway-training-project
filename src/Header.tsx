@@ -12,7 +12,6 @@ const { Search } = Input;
 const onSearch = (value: string) => console.log(value);
 
 const isToken = localStorage.getItem("token");
-const userName = localStorage.getItem("name");
 console.log(isToken);
 
 const clearToken = () => {
@@ -29,7 +28,7 @@ const menu = (
       {
         key: "1",
         label: (
-          <Link rel="noopener noreferrer" to="/Manager/UsersInfo">
+          <Link rel="noopener noreferrer" to="/Manager/MyInfo">
             <b style={{ color: '#3d4d65' }}>Thông tin cá nhân</b>
           </Link>
         ),

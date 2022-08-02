@@ -3,7 +3,8 @@ import {
     UserOutlined,
     HomeFilled,
     IdcardOutlined,
-    FileSearchOutlined
+    FileSearchOutlined,
+    TeamOutlined
 } from '@ant-design/icons';
 import { Image } from 'antd';
 import 'antd/dist/antd.css';
@@ -36,10 +37,16 @@ const ManagerSidebar = () => {
                     link: "./MyInfo"
                 },
                 {
-                    key: "manager",
+                    key: "newsManager",
                     icon: <FileSearchOutlined />,
                     title: "Quản lý tin tức",
                     link: "./NewsManager"
+                },
+                {
+                    key: "usersManager",
+                    icon: <TeamOutlined />,
+                    title: "Quản lý người dùng",
+                    link: "./UsersManager"
                 },
                 {
                     key: "form",
@@ -55,7 +62,7 @@ const ManagerSidebar = () => {
         <>
             <Sider collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
                 <Menu theme="dark" defaultSelectedKeys={[location.pathname]} mode="inline">
-                    <Image style={{ width: "60%", marginLeft: 20 }} src='https://cdn.logo.com/hotlink-ok/logo-social.png'/>
+                    <Image style={{ width: "60%", marginLeft: 20 }} src='https://cdn.logo.com/hotlink-ok/logo-social.png' />
                     {items.map((item) =>
                         !item.children ? (
                             <Menu.Item key={item.key}>

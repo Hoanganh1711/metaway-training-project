@@ -16,6 +16,7 @@ import { store } from "./app/store";
 import { Provider } from "react-redux";
 import EditNews from "./pages/Admin/EditNews";
 import CheckViewNews from "./pages/Admin/CheckViewNews";
+import UsersManager from "./pages/Admin/UsersManager";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -34,6 +35,7 @@ root.render(
           <Route path="/Manager/MyInfo" element={<UsersInfo />} />
           <Route path="/Manager/CreateNewsForm" element={<CreateNewsForm />} />
           <Route path="/Manager/NewsManager" element={<NewsManager />} />
+          <Route path="/Manager/UsersManager" element={<UsersManager />} />
           <Route path="/Manager/EditNews/:params" element={<EditNews />} />
           <Route path="/Manager/check/news/:params" element={<CheckViewNews />} />
         </Route>
