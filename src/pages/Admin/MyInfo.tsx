@@ -35,12 +35,13 @@ const beforeUpload = (file: any) => {
 const AdminInfo = () => {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
-    // const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [address, setAddress] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [rolse, setRolse] = useState([])
     const [avatar, setAvatar] = useState('')
+    const [birthDay, setBirthDay] = useState('')
+    const [gender, setGender] = useState('')
     const [imageUrl, setImageUrl] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -84,12 +85,13 @@ const AdminInfo = () => {
                 console.log(response.data);
                 setFirstName(response.data.firstName)
                 setLastName(response.data.lastName)
-                // setUserName(response.data.username)
                 setEmail(response.data.email)
                 setAddress(response.data.address)
                 setPhoneNumber(response.data.phoneNumber)
                 setRolse(response.data.roles)
                 setAvatar(response.data.avt)
+                setBirthDay(response.data.birthday)
+                setGender(response.data.gender)
             })
             .catch(error => {
                 console.log(error);
@@ -190,6 +192,23 @@ const AdminInfo = () => {
                             <span>{address}</span>
                         </Col>
                     </Row>
+                    <Row className="info-item">
+                        <Col span={8}>
+                            Sinh nhật:
+                        </Col>
+                        <Col span={8}>
+                            {birthDay ? <span>{birthDay}</span> : <span>---</span>}
+
+                        </Col>
+                    </Row>
+                    <Row className="info-item">
+                        <Col span={8}>
+                            Giới tính:
+                        </Col>
+                        <Col span={8}>
+                            {gender ? <span>{gender}</span> : <span>---</span>}
+                        </Col>
+                    </Row>
                 </div>
             </div>
 
@@ -199,7 +218,7 @@ const AdminInfo = () => {
                     scrollToFirstError
                 >
                     <div>
-                        <Row style={{justifyContent: "space-between"}}>
+                        <Row style={{ justifyContent: "space-between" }}>
                             <Col span={11}>
                                 <Form.Item
                                     name="First Name"

@@ -1,10 +1,10 @@
 /* eslint-disable array-callback-return */
 import {
     SearchOutlined,
-    DeleteFilled,
     ExclamationCircleOutlined,
+    SettingTwoTone,
 } from "@ant-design/icons";
-import { Alert, InputRef, Modal, Row, Select } from "antd";
+import { InputRef, Modal, Row, Select } from "antd";
 import { Button, Input, Space, Table } from "antd";
 import type { ColumnsType, ColumnType } from "antd/lib/table";
 import type { FilterConfirmProps } from "antd/lib/table/interface";
@@ -14,7 +14,8 @@ import "antd/dist/antd.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Spin } from 'antd';
-import { getRoles } from "@testing-library/react";
+
+const { Option } = Select;
 
 const UsersManager = () => {
     interface DataType {
@@ -23,6 +24,7 @@ const UsersManager = () => {
         firstname: string;
         lastname: string;
         username: string;
+        fullName: string;
         status: boolean;
         roles: [];
     }
@@ -31,7 +33,16 @@ const UsersManager = () => {
 
     const [usersList, setUsersList] = useState<any[]>([]);
     const [searchText, setSearchText] = useState("");
-    const [searchedColumn, setSearchedColumn] = useState("");
+    const [searchedColumn, setSearchedColumn] = useState("")
+
+    const rolesList = [
+        { id: 1, name: "ROLE_ADMIN" },
+        { id: 2, name: "ROLE_MODERATOR" },
+        { id: 3, name: "ROLE_USER" }
+    ]
+
+    const [newRolesID, setNewRolesId] = useState('')
+    const [rolesName, setRolesName] = useState('')
 
     const usersAPI = () => {
         axios.get("https://heroku-done-all-manager.herokuapp.com/api/v1/user/views/list",
@@ -43,10 +54,15 @@ const UsersManager = () => {
         )
             .then(function (response) {
                 console.log("response.data", response.data);
-                response.data.map((item: any) =>
-                    item.fullName = item.lastName + " " + item.firstName,
-                )
                 setUsersList(response.data)
+
+                response.data.map((item: any) =>
+                    item.fullName = item.firstName + " " + item.lastName,
+                )
+
+                response.data.map((item: any) => {
+                    setRolesName(item.roles[0].name)
+                })
             })
             .catch(function (error) {
                 console.log(error);
@@ -54,37 +70,75 @@ const UsersManager = () => {
     };
 
     useEffect(() => {
-        usersAPI();
+        usersAPI()
+        console.log("test", rolesName)
     }, []);
-
 
     // Xóa một người dùng
     const deleteOneUser = (index: any, row: any) => {
+        console.log("row.id", row.id);
+
+        // Modal.confirm({
+        //     title: "Chắc chắn muốn xóa người dùng này ?",
+        //     icon: <ExclamationCircleOutlined />,
+        //     okType: "danger",
+        //     onOk: () => {
+        //         usersList.filter((data: any) => {
+        //             axios
+        //                 .delete(
+        //                     `https://heroku-done-all-manager.herokuapp.com/api/v1/user/admin/${row.id}`,
+        //                     {
+        //                         headers: {
+        //                             Authorization: "Bearer " + localStorage.getItem("token"),
+        //                         },
+        //                     }
+        //                 )
+        //                 .then(function (response) {
+        //                     window.location.reload();
+        //                     setUsersList(response.data);
+        //                 })
+        //                 .catch(function (error) {
+        //                     console.log(error);
+        //                 });
+        //         });
+        //     },
+        //     cancelText: "Cancel",
+        // });
+    };
+
+    //Thay đổi quyền của người dùng
+    const handleSelectNewRoles = (e: any, row: any) => {
+        setNewRolesId(e);
+        confirm()
+    }
+
+    const confirm = () => {
         Modal.confirm({
-            title: "Chắc chắn muốn xóa người dùng này ?",
+            title: 'Xác nhận thay đổi tư cách thành viên?',
             icon: <ExclamationCircleOutlined />,
-            okType: "danger",
-            onOk: () => {
-                usersList.filter((data: any) => {
-                    axios
-                        .delete(
-                            `https://heroku-done-all-manager.herokuapp.com/api/v1/user/admin/${row.id}`,
-                            {
-                                headers: {
-                                    Authorization: "Bearer " + localStorage.getItem("token"),
-                                },
-                            }
-                        )
-                        .then(function (response) {
-                            window.location.reload();
-                            setUsersList(response.data);
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                });
-            },
-            cancelText: "Cancel",
+            okText: 'OK',
+            cancelText: 'Cancel',
+            // onOk: () => {
+            //     axios.put(`https://heroku-done-all-manager.herokuapp.com/api/v1/user/update/${row.id}/roles`,
+            //         {
+            //             roles: [{
+            //                 id: newRolesID,
+            //                 name: rolesName
+            //             }]
+            //         }, {
+            //         headers: {
+            //             Authorization: "Bearer " + localStorage.getItem("token"),
+            //         },
+            //     }
+            //     )
+            //         .then(response => {
+            //             console.log(response);
+            //         })
+            //         .catch(error => {
+            //             console.log(error);
+
+            //         })
+            // }
         });
     };
 
@@ -192,7 +246,7 @@ const UsersManager = () => {
             dataIndex: "id",
             key: "id",
             width: "5%",
-            ...getColumnSearchProps("username"),
+            ...getColumnSearchProps("id"),
             render: (text: string, row) => {
                 return (
                     <Row style={{ alignItems: "center" }}>
@@ -220,9 +274,9 @@ const UsersManager = () => {
         {
             title: "Tên đầy đủ",
             dataIndex: "fullName",
-            key: "fullname",
+            key: "fullName",
             width: "20%",
-            ...getColumnSearchProps("username"),
+            ...getColumnSearchProps("fullName"),
             render: (text: string, row) => {
                 return (
                     <Row style={{ alignItems: "center" }}>
@@ -232,13 +286,13 @@ const UsersManager = () => {
             },
         },
         {
-            title: "Chức vụ",
+            title: "Tư cách thành viên",
             dataIndex: ['roles', '[0]', '[name]'],
             key: "roles",
             width: "20%",
             filters: [
                 {
-                    text: "Admin",
+                    text: "Quản trị viên",
                     value: "ROLE_ADMIN",
                 },
                 {
@@ -251,8 +305,8 @@ const UsersManager = () => {
                 },
             ],
             onFilter: (value: any, record: any) => {
-                console.log(record, 'record testtest');
-                return value ? record.name : !record.name
+                console.log(value, 'value testtest', record.roles[0].name);
+                return record.roles[0].name === value
             },
             render: (roles: string, row: any) => {
                 let rolesName = row.roles[0].name
@@ -261,49 +315,38 @@ const UsersManager = () => {
                 } else if (rolesName === "ROLE_MODERATOR") {
                     rolesName = "Cộng tác viên"
                 } else {
-                    rolesName = "Admin"
+                    rolesName = "Quản trị viên"
                 }
-
                 return (
-                    <span>
-                        {rolesName}
-                    </span>
+                    <Row style={{ alignItems: "center" }}>
+                        <Select style={{ width: 130 }} defaultValue={rolesName} onChange={(e, row) => handleSelectNewRoles(e, row)}>
+                            {rolesList.map((item: any) => {
+                                if (item.name === "ROLE_USER") {
+                                    item.name = "Người dùng"
+                                } else if (item.name === "ROLE_MODERATOR") {
+                                    item.name = "Cộng tác viên"
+                                } else if (item.name === "ROLE_ADMIN") {
+                                    item.name = "Quản trị viên"
+                                }
+                                return (
+                                    <Option key={item.id}>{item.name}</Option>
+                                )
+                            })}
+                        </Select>
+                    </Row>
                 );
             },
         },
-        // {
-        //     title: "Trạng thái",
-        //     dataIndex: "status",
-        //     key: "status",
-        //     width: "12%",
-        //     filters: [
-        //         {
-        //             text: "Công khai",
-        //             value: true,
-        //         },
-        //         {
-        //             text: "Chờ duyệt",
-        //             value: false,
-        //         },
-        //     ],
-        //     onFilter: (value: any, record) => {
-        //         console.log(record, 'record testtest');
-        //         return value ? record.status : !record.status
-        //     },
-        //     render: (status: string) => (
-        //         <>{status ? <div key="public">Công khai</div> : <div key="hiding">Chờ duyệt</div>}</>
-        //     ),
-        // },
         {
-            title: "Xử lý",
+            title: "Quản lý",
             dataIndex: "action",
             key: "action",
             width: "10%",
             render: (abc, row) => {
                 return (
                     <Row style={{ alignItems: "center" }}>
-                        <Button onClick={() => deleteOneUser(abc, row)} type="link" danger>
-                            <DeleteFilled />
+                        <Button onClick={() => deleteOneUser(abc, row)} type="link">
+                            <SettingTwoTone /> Điều chỉnh
                         </Button>
                     </Row>
                 );
