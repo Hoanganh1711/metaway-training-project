@@ -19,29 +19,29 @@ import CheckViewNews from "./pages/Admin/CheckViewNews";
 import UsersManager from "./pages/Admin/UsersManager";
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+    document.getElementById("root") as HTMLElement
 );
 root.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route path="/" element={<HomePageContent />} />
-          <Route path="/signIn" element={<SignIn />} />
-          <Route path="/signUp" element={<SignUp />} />
-          <Route path="/showNews" element={<ShowNews />} />
-        </Route>
-        <Route path="/Manager" element={localStorage.getItem("roles") === "ROLE_ADMIN" ? <Manager /> : <Navigate to="/" />}>
-          <Route path="/Manager/MyInfo" element={<UsersInfo />} />
-          <Route path="/Manager/CreateNewsForm" element={<CreateNewsForm />} />
-          <Route path="/Manager/NewsManager" element={<NewsManager />} />
-          <Route path="/Manager/UsersManager" element={<UsersManager />} />
-          <Route path="/Manager/EditNews/:params" element={<EditNews />} />
-          <Route path="/Manager/check/news/:params" element={<CheckViewNews />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  </Provider>
+    <Provider store={store}>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<App />}>
+                    <Route path="/" element={<HomePageContent />} />
+                    <Route path="/signIn" element={<SignIn />} />
+                    <Route path="/signUp" element={<SignUp />} />
+                    <Route path="/showNews" element={<ShowNews />} />
+                </Route>
+                <Route path="/Manager" element={localStorage.getItem("roles") === "ROLE_ADMIN" ? <Manager /> : <Navigate to="/" />}>
+                    <Route path="/Manager/MyInfo" element={<UsersInfo />} />
+                    <Route path="/Manager/CreateNewsForm" element={<CreateNewsForm />} />
+                    <Route path="/Manager/NewsManager" element={<NewsManager />} />
+                    <Route path="/Manager/UsersManager" element={<UsersManager />} />
+                    <Route path="/Manager/EditNews/:params" element={<EditNews />} />
+                    <Route path="/Manager/check/news/:params" element={<CheckViewNews />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

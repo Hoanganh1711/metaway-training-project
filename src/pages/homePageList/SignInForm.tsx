@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
-import { LoadingOutlined, LockOutlined, UserOutlined, WindowsFilled, FacebookFilled, TwitterCircleFilled, GoogleCircleFilled } from '@ant-design/icons';
+import { LoadingOutlined, LockOutlined, UserOutlined, FacebookFilled, TwitterCircleFilled, GoogleCircleFilled } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Row } from 'antd';
 import "../../index.css"
 import { Link } from 'react-router-dom';

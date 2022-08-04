@@ -4,8 +4,9 @@ import {
     ExclamationCircleOutlined,
     SettingTwoTone,
 } from "@ant-design/icons";
-import { InputRef, Modal, Row, Select } from "antd";
-import { Button, Input, Space, Table } from "antd";
+import '../../index.css'
+import { InputRef, Modal, Row, Select, message } from "antd";
+import { Button, Input, Space, Table, Spin } from "antd";
 import type { ColumnsType, ColumnType } from "antd/lib/table";
 import type { FilterConfirmProps } from "antd/lib/table/interface";
 import React, { useEffect, useRef, useState } from "react";
@@ -13,7 +14,6 @@ import Highlighter from "react-highlight-words";
 import "antd/dist/antd.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Spin } from 'antd';
 
 const { Option } = Select;
 
@@ -44,6 +44,8 @@ const UsersManager = () => {
     const [newRolesID, setNewRolesId] = useState('')
     const [rolesName, setRolesName] = useState('')
 
+    const [rowId, setRowId] = useState('')
+
     const usersAPI = () => {
         axios.get("https://heroku-done-all-manager.herokuapp.com/api/v1/user/views/list",
             {
@@ -53,7 +55,7 @@ const UsersManager = () => {
             }
         )
             .then(function (response) {
-                console.log("response.data", response.data);
+                // console.log("response.data", response.data);
                 setUsersList(response.data)
 
                 response.data.map((item: any) =>
@@ -76,7 +78,7 @@ const UsersManager = () => {
 
     // Xóa một người dùng
     const deleteOneUser = (index: any, row: any) => {
-        console.log("row.id", row.id);
+        // console.log("row.id", row.id);
 
         // Modal.confirm({
         //     title: "Chắc chắn muốn xóa người dùng này ?",
@@ -109,36 +111,48 @@ const UsersManager = () => {
     //Thay đổi quyền của người dùng
     const handleSelectNewRoles = (e: any, row: any) => {
         setNewRolesId(e);
-        confirm()
+        setRowId(row.id)
+        confirm(e, row.id)
     }
 
-    const confirm = () => {
+    console.log('newRolesID', newRolesID);
+    console.log('rolesName', rolesName);
+    console.log('rowId', rowId);
+
+    const changerRolesSuccess = () => {
+        message.success('Cập nhật thành công!');
+    };
+
+    const confirm = (e: any, id: any) => {
         Modal.confirm({
             title: 'Xác nhận thay đổi tư cách thành viên?',
             icon: <ExclamationCircleOutlined />,
             okText: 'OK',
             cancelText: 'Cancel',
-            // onOk: () => {
-            //     axios.put(`https://heroku-done-all-manager.herokuapp.com/api/v1/user/update/${row.id}/roles`,
-            //         {
-            //             roles: [{
-            //                 id: newRolesID,
-            //                 name: rolesName
-            //             }]
-            //         }, {
-            //         headers: {
-            //             Authorization: "Bearer " + localStorage.getItem("token"),
-            //         },
-            //     }
-            //     )
-            //         .then(response => {
-            //             console.log(response);
-            //         })
-            //         .catch(error => {
-            //             console.log(error);
-
-            //         })
-            // }
+            onOk: () => {
+                axios.put(`https://heroku-done-all-manager.herokuapp.com/api/v1/user/update/${id}/roles`,
+                    {
+                        roles: [
+                            {
+                                id: e,
+                                name: rolesName
+                            }
+                        ]
+                    },
+                    {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token"),
+                        },
+                    },
+                )
+                    .then(response => {
+                        console.log(response);
+                        changerRolesSuccess()
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            }
         });
     };
 
@@ -305,10 +319,10 @@ const UsersManager = () => {
                 },
             ],
             onFilter: (value: any, record: any) => {
-                console.log(value, 'value testtest', record.roles[0].name);
                 return record.roles[0].name === value
             },
             render: (roles: string, row: any) => {
+                console.log(row.id);
                 let rolesName = row.roles[0].name
                 if (rolesName === "ROLE_USER") {
                     rolesName = "Người dùng"
@@ -319,7 +333,7 @@ const UsersManager = () => {
                 }
                 return (
                     <Row style={{ alignItems: "center" }}>
-                        <Select style={{ width: 130 }} defaultValue={rolesName} onChange={(e, row) => handleSelectNewRoles(e, row)}>
+                        <Select style={{ width: 130 }} defaultValue={rolesName} onChange={(e) => handleSelectNewRoles(e, row)}>
                             {rolesList.map((item: any) => {
                                 if (item.name === "ROLE_USER") {
                                     item.name = "Người dùng"
@@ -329,7 +343,7 @@ const UsersManager = () => {
                                     item.name = "Quản trị viên"
                                 }
                                 return (
-                                    <Option key={item.id}>{item.name}</Option>
+                                    <Option className='select-roles-option' key={item.id}>{item.name}</Option>
                                 )
                             })}
                         </Select>
