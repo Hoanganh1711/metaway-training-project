@@ -236,6 +236,24 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-dark {
 }
 
 /* News manager css */
-.ant-select-selector {
+.role-select-box{
   border: none !important
+}
+
+/* User Manager CSS */
+.disabled-row {
+  background-color: #dcdcdc;
+  pointer-events: none;
+}
+
+span.anticon.anticon-info-circle {
+  display: none;
+}
+
+.user-avatar {
+  text-align: center;
+}
+
+.user-info-item {
+  justify-content: space-between;
 }

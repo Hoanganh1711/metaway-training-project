@@ -1,11 +1,10 @@
 /* eslint-disable array-callback-return */
 import {
     SearchOutlined,
-    ExclamationCircleOutlined,
-    SettingTwoTone,
+    ExclamationCircleOutlined
 } from "@ant-design/icons";
 import '../../index.css'
-import { InputRef, Modal, Row, Select, message } from "antd";
+import { InputRef, Modal, Row, Select, message, Divider, Image } from "antd";
 import { Button, Input, Space, Table, Spin } from "antd";
 import type { ColumnsType, ColumnType } from "antd/lib/table";
 import type { FilterConfirmProps } from "antd/lib/table/interface";
@@ -14,6 +13,7 @@ import Highlighter from "react-highlight-words";
 import "antd/dist/antd.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import type { TableRowSelection } from 'antd/es/table/interface';
 
 const { Option } = Select;
 
@@ -41,10 +41,26 @@ const UsersManager = () => {
         { id: 3, name: "ROLE_USER" }
     ]
 
-    const [newRolesID, setNewRolesId] = useState('')
     const [rolesName, setRolesName] = useState('')
 
-    const [rowId, setRowId] = useState('')
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
+    // useState for UserInfoModal
+
+    const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        setSelectedRowKeys(newSelectedRowKeys);
+    };
+
+    const rowSelection: TableRowSelection<DataType> = {
+        selectedRowKeys,
+        onChange: onSelectChange,
+        selections: [
+            Table.SELECTION_ALL,
+            Table.SELECTION_INVERT,
+            Table.SELECTION_NONE,
+        ],
+    };
 
     const usersAPI = () => {
         axios.get("https://heroku-done-all-manager.herokuapp.com/api/v1/user/views/list",
@@ -73,51 +89,15 @@ const UsersManager = () => {
 
     useEffect(() => {
         usersAPI()
-        console.log("test", rolesName)
     }, []);
 
-    // Xóa một người dùng
-    const deleteOneUser = (index: any, row: any) => {
-        // console.log("row.id", row.id);
+    console.log(usersList);
 
-        // Modal.confirm({
-        //     title: "Chắc chắn muốn xóa người dùng này ?",
-        //     icon: <ExclamationCircleOutlined />,
-        //     okType: "danger",
-        //     onOk: () => {
-        //         usersList.filter((data: any) => {
-        //             axios
-        //                 .delete(
-        //                     `https://heroku-done-all-manager.herokuapp.com/api/v1/user/admin/${row.id}`,
-        //                     {
-        //                         headers: {
-        //                             Authorization: "Bearer " + localStorage.getItem("token"),
-        //                         },
-        //                     }
-        //                 )
-        //                 .then(function (response) {
-        //                     window.location.reload();
-        //                     setUsersList(response.data);
-        //                 })
-        //                 .catch(function (error) {
-        //                     console.log(error);
-        //                 });
-        //         });
-        //     },
-        //     cancelText: "Cancel",
-        // });
-    };
 
     //Thay đổi quyền của người dùng
     const handleSelectNewRoles = (e: any, row: any) => {
-        setNewRolesId(e);
-        setRowId(row.id)
         confirm(e, row.id)
     }
-
-    console.log('newRolesID', newRolesID);
-    console.log('rolesName', rolesName);
-    console.log('rowId', rowId);
 
     const changerRolesSuccess = () => {
         message.success('Cập nhật thành công!');
@@ -128,6 +108,7 @@ const UsersManager = () => {
             title: 'Xác nhận thay đổi tư cách thành viên?',
             icon: <ExclamationCircleOutlined />,
             okText: 'OK',
+
             cancelText: 'Cancel',
             onOk: () => {
                 axios.put(`https://heroku-done-all-manager.herokuapp.com/api/v1/user/update/${id}/roles`,
@@ -152,8 +133,64 @@ const UsersManager = () => {
                     .catch(error => {
                         console.log(error);
                     })
-            }
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
         });
+    };
+
+    const showInfoModal = async (row: any) => {
+        await axios.get(`https://heroku-done-all-manager.herokuapp.com/api/v1/user/views/list/${row.id}`,
+            {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            }
+        )
+            .then(response => {
+                console.log(response);
+                info(row);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+    const info = (row: any) => {
+        console.log("row", row);
+
+        Modal.info({
+            content: (
+                <>
+                    <div className="user-avatar">
+                        {(typeof row.avt === "object") ?
+                            <Image
+                                style={{ borderRadius: "50%" }}
+                                width="40%"
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmywnX8X85jiWUi9y_1ul_75WhF82V5yq41A&usqp=CAU"
+                            />
+                            :
+                            <Image
+                                style={{ borderRadius: "50%" }}
+                                width="40%"
+                                src={row.avt}
+                            />
+                        }
+                    </div>
+                    <Divider />
+                    <div className="user-Info">
+                        <Row className="user-info-item"><div><b>Họ tên:</b></div><div>{row.firstName} {row.lastName}</div></Row>
+                        <Row className="user-info-item"><div><b>Vai trò:</b></div><div>{row.roles[0].name}</div></Row>
+                        <Row className="user-info-item"><div><b>Email:</b></div><div>{row.email}</div></Row>
+                        <Row className="user-info-item"><div><b>Số điện thoại:</b></div><div>{row.phoneNumber}</div></Row>
+                        <Row className="user-info-item"><div><b>Địa chỉ:</b></div><div>{row.address}</div></Row>
+                        <Row className="user-info-item"><div><b>Giới tính:</b></div><div>{row.gender ? row.gender : "---"}</div></Row>
+                    </div>
+                </>
+            ),
+            onOk() { },
+        })
     };
 
     const searchInput = useRef<InputRef>(null);
@@ -259,7 +296,7 @@ const UsersManager = () => {
             title: "ID",
             dataIndex: "id",
             key: "id",
-            width: "5%",
+            width: "10%",
             ...getColumnSearchProps("id"),
             render: (text: string, row) => {
                 return (
@@ -273,12 +310,12 @@ const UsersManager = () => {
             title: "Tên truy cập",
             dataIndex: "username",
             key: "username",
-            width: "20%",
+            width: "30%",
             ...getColumnSearchProps("username"),
-            render: (text: string, row) => {
+            render: (text: string, row: any) => {
                 return (
                     <Row style={{ alignItems: "center" }}>
-                        <Link key={row.id} to={{ pathname: `/Manager/check/news/${row.id}` }}>
+                        <Link onClick={() => showInfoModal(row)} key={row.id} to='#'>
                             {text}
                         </Link>
                     </Row>
@@ -289,7 +326,7 @@ const UsersManager = () => {
             title: "Tên đầy đủ",
             dataIndex: "fullName",
             key: "fullName",
-            width: "20%",
+            width: "30%",
             ...getColumnSearchProps("fullName"),
             render: (text: string, row) => {
                 return (
@@ -303,7 +340,7 @@ const UsersManager = () => {
             title: "Tư cách thành viên",
             dataIndex: ['roles', '[0]', '[name]'],
             key: "roles",
-            width: "20%",
+            width: "30%",
             filters: [
                 {
                     text: "Quản trị viên",
@@ -322,7 +359,6 @@ const UsersManager = () => {
                 return record.roles[0].name === value
             },
             render: (roles: string, row: any) => {
-                console.log(row.id);
                 let rolesName = row.roles[0].name
                 if (rolesName === "ROLE_USER") {
                     rolesName = "Người dùng"
@@ -331,60 +367,69 @@ const UsersManager = () => {
                 } else {
                     rolesName = "Quản trị viên"
                 }
+
                 return (
                     <Row style={{ alignItems: "center" }}>
-                        <Select style={{ width: 130 }} defaultValue={rolesName} onChange={(e) => handleSelectNewRoles(e, row)}>
-                            {rolesList.map((item: any) => {
-                                if (item.name === "ROLE_USER") {
-                                    item.name = "Người dùng"
-                                } else if (item.name === "ROLE_MODERATOR") {
-                                    item.name = "Cộng tác viên"
-                                } else if (item.name === "ROLE_ADMIN") {
-                                    item.name = "Quản trị viên"
-                                }
-                                return (
-                                    <Option className='select-roles-option' key={item.id}>{item.name}</Option>
-                                )
-                            })}
-                        </Select>
-                    </Row>
-                );
-            },
-        },
-        {
-            title: "Quản lý",
-            dataIndex: "action",
-            key: "action",
-            width: "10%",
-            render: (abc, row) => {
-                return (
-                    <Row style={{ alignItems: "center" }}>
-                        <Button onClick={() => deleteOneUser(abc, row)} type="link">
-                            <SettingTwoTone /> Điều chỉnh
-                        </Button>
+                        {row.roles[0].name === "ROLE_ADMIN" ?
+                            <Select style={{ width: 140 }} bordered={false} disabled defaultValue={rolesName} onChange={(e) => handleSelectNewRoles(e, row)}>
+                                {rolesList.map((item: any) => {
+                                    if (item.name === "ROLE_USER") {
+                                        item.name = "Người dùng"
+                                    } else if (item.name === "ROLE_MODERATOR") {
+                                        item.name = "Cộng tác viên"
+                                    } else if (item.name === "ROLE_ADMIN") {
+                                        item.name = "Quản trị viên"
+                                    }
+                                    return (
+                                        <Option key={item.id}>{item.name}</Option>
+                                    )
+                                })}
+                            </Select>
+                            :
+                            <Select style={{ width: 140 }} bordered={false} defaultValue={rolesName} onChange={(e) => handleSelectNewRoles(e, row)}>
+                                {rolesList.map((item: any) => {
+                                    if (item.name === "ROLE_USER") {
+                                        item.name = "Người dùng"
+                                    } else if (item.name === "ROLE_MODERATOR") {
+                                        item.name = "Cộng tác viên"
+                                    } else if (item.name === "ROLE_ADMIN") {
+                                        item.name = "Quản trị viên"
+                                    }
+                                    return (
+                                        <Option key={item.id}>{item.name}</Option>
+                                    )
+                                })}
+                            </Select>
+                        }
                     </Row>
                 );
             },
         },
     ];
 
-    return !usersList ? (<Spin tip="Đang tải dữ liệu...">
-        <Table
-            rowKey={(items) => items.id}
-            style={{ marginTop: 30 }}
-            columns={columns}
-            dataSource={usersList}
-        />
-    </Spin>) : (
-        <>
-            <Table
-                rowKey={(items) => items.id}
-                style={{ marginTop: 30 }}
-                columns={columns}
-                dataSource={usersList}
-            />
-        </>
-    );
+    return (
+        <div>
+            {
+                !usersList ? (<Spin tip="Đang tải dữ liệu...">
+                    <Table
+                        rowKey={(items) => items.id}
+                        rowSelection={rowSelection}
+                        style={{ marginTop: 30 }}
+                        columns={columns}
+                        dataSource={usersList}
+                    />
+                </Spin>) : (
+                    <Table
+                        rowKey={(items) => items.id}
+                        rowSelection={rowSelection}
+                        style={{ marginTop: 30 }}
+                        columns={columns}
+                        dataSource={usersList}
+                    />
+                )
+            }
+        </div>
+    )
 };
 
 export default UsersManager;
