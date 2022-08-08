@@ -81,7 +81,6 @@ const EditNews = () => {
             .then(response => {
                 console.log(response.data.description);
                 console.log(response.data.categorie);
-                // console.log("img test" ,response.data.img);
                 setImageUrl(response.data.img)
                 
 

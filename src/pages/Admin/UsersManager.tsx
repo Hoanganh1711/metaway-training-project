@@ -1,7 +1,8 @@
 /* eslint-disable array-callback-return */
 import {
     SearchOutlined,
-    ExclamationCircleOutlined
+    ExclamationCircleOutlined,
+    SettingTwoTone
 } from "@ant-design/icons";
 import '../../index.css'
 import { InputRef, Modal, Row, Select, message, Divider, Image } from "antd";
@@ -44,8 +45,6 @@ const UsersManager = () => {
     const [rolesName, setRolesName] = useState('')
 
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
-    // useState for UserInfoModal
 
     const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
@@ -192,6 +191,10 @@ const UsersManager = () => {
             onOk() { },
         })
     };
+
+    const showSettingModal = (row: any) => {
+        alert(row.id)
+    }
 
     const searchInput = useRef<InputRef>(null);
 
@@ -340,7 +343,7 @@ const UsersManager = () => {
             title: "Tư cách thành viên",
             dataIndex: ['roles', '[0]', '[name]'],
             key: "roles",
-            width: "30%",
+            width: "20%",
             filters: [
                 {
                     text: "Quản trị viên",
@@ -401,6 +404,20 @@ const UsersManager = () => {
                                 })}
                             </Select>
                         }
+                    </Row>
+                );
+            },
+        },
+        {
+            title: "Điều chỉnh",
+            dataIndex: "setting",
+            key: "setting",
+            width: "40%",
+            ...getColumnSearchProps("fullName"),
+            render: (index: any, row: any) => {
+                return (
+                    <Row onClick={() => showSettingModal(row)} style={{ alignItems: "center", cursor: 'pointer' }}>
+                        <SettingTwoTone />
                     </Row>
                 );
             },

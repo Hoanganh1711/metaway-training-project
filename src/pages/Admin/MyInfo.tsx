@@ -1,9 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { CameraFilled, FormOutlined } from "@ant-design/icons"
-import { Col, Divider, Form, Input, message, Modal, Row, Tooltip, Upload } from "antd"
+import { Col, DatePicker, Divider, Form, Input, message, Modal, Row, Tooltip, Upload } from "antd"
 import axios from "axios"
 import '../../index.css'
 import { useEffect, useState } from "react"
 import { Image } from 'antd';
+import { Select } from 'antd'
+import { timeStamp } from "console"
 
 const editProfileText = <span>Edit profile</span>
 const editAvatarText = <span>Update Avatar</span>
@@ -30,11 +33,13 @@ const beforeUpload = (file: any) => {
     return isJpgOrPng && isLt2M;
 };
 
+const { Option } = Select;
 
 
 const AdminInfo = () => {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
+    const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [address, setAddress] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
@@ -43,7 +48,17 @@ const AdminInfo = () => {
     const [birthDay, setBirthDay] = useState('')
     const [gender, setGender] = useState('')
     const [imageUrl, setImageUrl] = useState('');
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(false)
+
+    // Changer User Value State
+    // const [changerId, setChangerId] = useState('')
+    const [changerFirstName, setChangerFirstName] = useState('')
+    const [changerLastName, setChangerLastName] = useState('')
+    const [changerEmail, setChangerEmail] = useState('')
+    const [changerAddress, setChangerAddress] = useState('')
+    const [changerPhoneNumber, setChangerPhoneNumber] = useState('')
+    const [changerBirthDay, setChangerBirthDay] = useState('')
+    const [changerGender, setChangerGender] = useState('')
 
     const handleChange = (info: any) => {
         if (info.file.status === 'done') {
@@ -53,8 +68,6 @@ const AdminInfo = () => {
             });
         }
     };
-
-    console.log('imageUrl', imageUrl);
 
     const editAvatar = () => {
         axios.put(`https://heroku-done-all-manager.herokuapp.com/api/v1/user/update/${myID}`,
@@ -71,10 +84,9 @@ const AdminInfo = () => {
 
 
     const myID = localStorage.getItem('id')
-    console.log(myID);
 
-    const myInfoApi = () => {
-        axios.get(`https://heroku-done-all-manager.herokuapp.com/api/v1/user/views/list/${myID}`,
+    const myInfoApi = async () => {
+        await axios.get(`https://heroku-done-all-manager.herokuapp.com/api/v1/user/views/list/${myID}`,
             {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -82,9 +94,9 @@ const AdminInfo = () => {
             }
         )
             .then(response => {
-                console.log(response.data);
                 setFirstName(response.data.firstName)
                 setLastName(response.data.lastName)
+                setUserName(response.data.username)
                 setEmail(response.data.email)
                 setAddress(response.data.address)
                 setPhoneNumber(response.data.phoneNumber)
@@ -92,6 +104,19 @@ const AdminInfo = () => {
                 setAvatar(response.data.avt)
                 setBirthDay(response.data.birthday)
                 setGender(response.data.gender)
+
+                console.log(typeof response.data.birthday);
+
+
+                form.setFieldsValue({
+                    lastName: response.data.lastName,
+                    firstName: response.data.firstName,
+                    // birthday: response.data.birthday,
+                    gender: response.data.gender,
+                    email: response.data.email,
+                    address: response.data.address,
+                    phoneNumber: response.data.phoneNumber
+                });
             })
             .catch(error => {
                 console.log(error);
@@ -112,6 +137,109 @@ const AdminInfo = () => {
 
     const openEditInfoForm = () => {
         setIsModalVisible(true);
+    }
+
+    const handleChangerFirstName = (e: any) => {
+        setChangerFirstName(e.target.value)
+    }
+    const handleChangerLastName = (e: any) => {
+        setChangerLastName(e.target.value)
+    }
+    const handleChangerEmail = (e: any) => {
+        setChangerEmail(e.target.value)
+    }
+    const handleChangerAddress = (e: any) => {
+        setChangerAddress(e.target.value)
+    }
+    const handleChangerPhoneNumber = (e: any) => {
+        setChangerPhoneNumber(e.target.value)
+    }
+    const handleChangerGender = (e: any) => {
+        setChangerGender(e)
+    }
+
+    const handleChangerBirthday = (e: any) => {
+        console.log("birthDay", e);
+
+        // const timestampDate = Date.parse(e._d) / 1000;
+        // var a = new Date(timestampDate * 1000)
+        // let date = a.getDate().toString();
+        // date.toString().length === 1 ? date = "0" + a.getDate() : a.getDate()
+
+        // let month = (a.getMonth() + 1).toString()
+        // month.toString().length === 1 ? month = "0" + a.getMonth() : a.getMonth()
+        // const year = a.getFullYear()
+        // const selectedDate = year + '-' + month + '-' + date
+
+        // console.log("selectedDate", selectedDate);
+
+        // setChangerBirthDay(selectedDate)
+    }
+
+
+    const [form] = Form.useForm();
+
+    // form.setFieldsValue({
+    //     lastName: changerFirstName,
+    //     firstName: 'male',
+    //     birthday: "",
+    //     gender: "",
+    //     email: "",
+    //     address: "",
+    //     phoneNumber: ""
+    //   });
+
+    const handleEditInfo = () => {
+        form.validateFields()
+            .then((values: any) => {
+                let birthday = values.birthday._d
+                const timestampBirthday = Date.parse(birthday) / 1000
+                var a = new Date(timestampBirthday * 1000)
+                let date = a.getDate() < 10 ? "0" + a.getDate() : a.getDate()
+                let month = a.getMonth() < 10 ? "0" + a.getMonth() : a.getMonth()
+                let year = a.getFullYear()
+
+                const newBirthDay = year + "/" + month + "/" + date
+
+                values.birthday = newBirthDay
+                console.log("values", values);
+
+                // form.setFieldsValue({
+                //     lastName: values.lastName,
+                //     firstName: values.firstName,
+                //     birthday: values.birthday,
+                //     gender: values.gender,
+                //     email: values.email,
+                //     address: values.address,
+                //     phoneNumber: values.phoneNumber
+                // });
+
+                axios.put(`https://heroku-done-all-manager.herokuapp.com/api/v1/user/update/${myID}`,
+                    {
+                        lastName: changerLastName,
+                        firstName: changerFirstName,
+                        birthday: changerBirthDay,
+                        gender: changerGender,
+                        email: changerEmail,
+                        address: changerAddress,
+                        phoneNumber: changerPhoneNumber
+                        // values
+                    }
+                    ,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token"),
+                        },
+                    }
+                )
+                    .then(response => {
+                        console.log(response);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            })
+        // handleOk()
     }
 
     return (
@@ -212,37 +340,61 @@ const AdminInfo = () => {
                 </div>
             </div>
 
-            <Modal title="Cập nhật thông tin cá nhân" visible={isModalVisible} okText="Submit" onOk={handleOk} onCancel={handleCancel}>
+            <Modal title="Cập nhật thông tin cá nhân" visible={isModalVisible} okText="Submit" onOk={handleEditInfo} onCancel={handleCancel} forceRender>
                 <Form
                     layout="vertical"
                     scrollToFirstError
+                    form={form}
                 >
                     <div>
                         <Row style={{ justifyContent: "space-between" }}>
                             <Col span={11}>
                                 <Form.Item
-                                    name="First Name"
+                                    name="firstName"
                                     label="First Name"
                                 >
-                                    <Input placeholder='First Name' />
+                                    <Input placeholder='First Name' onChange={handleChangerFirstName} />
                                 </Form.Item>
                             </Col>
 
                             <Col span={11}>
                                 <Form.Item
-                                    name="Last Name"
+                                    name="lastName"
                                     label="Last Name"
                                 >
-                                    <Input placeholder='Last Name' />
+                                    <Input placeholder='Last Name' onChange={handleChangerLastName} />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+
+                        <Row style={{ justifyContent: "space-between" }}>
+                            <Col span={11}>
+                                <Form.Item
+                                    name="birthday"
+                                    label="Birthday"
+                                >
+                                    <DatePicker onChange={handleChangerBirthday} />
+                                </Form.Item>
+                            </Col>
+
+                            <Col span={11}>
+                                <Form.Item
+                                    name="gender"
+                                    label="Gender"
+                                >
+                                    <Select style={{ width: 120 }} onChange={handleChangerGender}>
+                                        <Option value="Nam">Nam</Option>
+                                        <Option value="Nữ">Nữ</Option>
+                                    </Select>
                                 </Form.Item>
                             </Col>
                         </Row>
 
                         <Form.Item
-                            name="phonenumber"
+                            name="phoneNumber"
                             label="Phone Number"
                         >
-                            <Input placeholder='Phone Number' />
+                            <Input placeholder='Phone Number' onChange={handleChangerPhoneNumber} />
                         </Form.Item>
 
                         <Form.Item
@@ -250,14 +402,14 @@ const AdminInfo = () => {
                             label="Email"
                             rules={[{ type: 'email' }]}
                         >
-                            <Input placeholder='Email' />
+                            <Input placeholder='Email' onChange={handleChangerEmail} />
                         </Form.Item>
 
                         <Form.Item
                             name="address"
                             label="Address"
                         >
-                            <Input placeholder='Address' />
+                            <Input placeholder='Address' onChange={handleChangerAddress} />
                         </Form.Item>
                     </div>
                 </Form>
