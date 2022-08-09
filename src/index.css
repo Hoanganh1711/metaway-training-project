@@ -13,16 +13,50 @@ code {
 }
 
 .header {
-  background-color: #1187d2;
-  border-bottom: solid 1px;
-  padding: 8px 0;
-  justify-content: space-around;
-  align-items: center;
+  border-bottom: solid 1px #ccc;
   position: fixed;
+  background-color: #fff;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1;
+}
+
+.top-header {
+  width: 70%;
+  margin: 0 auto;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.divider {
+  margin: 0px !important;
+}
+
+.nav {
+  width: 70%;
+  margin: 0 auto;
+  list-style: none;
+  justify-content: space-around;
+  align-items: center;
+  padding: 4px 0px;
+}
+
+.category {
+  color: #000;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.category:first-child {
+  background-color: #ccc;
+  padding: 6px 8px;
+  border-radius: 50%;
+}
+
+.category:hover {
+  color: #1187d2;
+  cursor: pointer;
 }
 
 .header-logo {
@@ -35,25 +69,15 @@ code {
   text-align: center;
 }
 
-.login-box,
-.logout-box {
-  display: flex;
-  align-items: center;
-}
-
 .logout-btn,
 .login-btn {
-  color: #fff;
-  border: solid 1px #ccc;
-  padding: 5px 10px;
+  color: rgb(158, 154, 154);
   cursor: pointer;
-  border-radius: 5px;
 }
 
 .login-btn:hover {
-  color: #fff;
-  background-color: blue;
-  transition: 0.1s;
+  color: #1187d2;
+  transition: 0.2s;
 }
 
 .register-btn {
@@ -219,8 +243,8 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-dark {
 /* Check News Css */
 .news-container {
   background-color: #fff;
-  padding: 30px 40px;
-  margin: 0 auto;
+  padding: 10px 20px;
+  /* margin: 0 auto; */
   max-width: 700px;
 }
 
@@ -256,4 +280,36 @@ span.anticon.anticon-info-circle {
 
 .user-info-item {
   justify-content: space-between;
+}
+
+/* Hot New CSS */
+/* .news-description {
+  background-color: #f7f7f7;
+  padding: 20px;
+} */
+.news-container {
+  border: solid 1px #ccc;
+  margin-bottom: 20px;
+}
+
+.news-items {
+  padding: 0 10px;
+}
+
+.news-title:hover {
+  color: #1187d2;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.news-category {
+  color: #fff;
+  font-size: 12px;
+  background-color: #1890ff;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+
+.divider {
+  margin: 10px !important;
 }

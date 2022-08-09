@@ -1,7 +1,6 @@
-import { EyeOutlined } from "@ant-design/icons";
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
-import { MessageOutlined } from "@ant-design/icons";
-import { List, Space } from "antd";
+import { Col, Divider, List, Row, Space } from "antd";
 import "../../index.css"
 import { Link } from "react-router-dom";
 import {
@@ -44,56 +43,47 @@ const HotNews = () => {
     };
 
     return (
-        <div style={{ margin: "50px auto", width: 900 }}>
-            <p style={{ fontSize: 24, fontWeight: 500 }}>Tin tức nổi bật</p>
-            <>
-                <List
-                    className="hot-news-list"
-                    style={{ backgroundColor: "#fff", padding: 15 }}
-                    itemLayout="vertical"
-                    size="large"
-                    pagination={{
-                        onChange: (page) => {
-                            console.log(page);
-                        },
-                        pageSize: 12,
-                    }}
-                    dataSource={hotNewsList}
-                    renderItem={(item, index) => (
-                        <List.Item
-                            key={index}
-                            actions={[
-                                <IconText
-                                    icon={EyeOutlined}
-                                    text={hotNewsList[index].views}
-                                    key="list-vertical-star-o"
-                                />
-                            ]}
-                            extra={
-                                <img
-                                    width={200}
-                                    alt="logo"
-                                    src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-                                />
-                            }
-                        >
-                            <List.Item.Meta
-                                title={
-                                    <Link
-                                        onClick={() => handleClickGetShowNews(hotNewsList, index)}
-                                        to="/showNews"
-                                    >
-                                        {item.title}
-                                    </Link>
-                                }
-                                description={item.description}
-                            />
-                            {/* {item.content} */}
-                        </List.Item>
-                    )}
-                />
-            </>
-        </div>
+        <Col>
+            <h2>Tin tức nổi bật</h2>
+            {hotNewsList.map((item: any) => {
+                let itemCategory = item.categories[0].name
+                if (itemCategory === "POLITICAL") {
+                    itemCategory = "Chính trị";
+                } else if (itemCategory === "SOCIAL") {
+                    itemCategory = "Xã hội";
+                } else if (itemCategory === "ECONOMY") {
+                    itemCategory = "Kinh tế";
+                } else if (itemCategory === "HEALTH") {
+                    itemCategory = "Sức khỏe";
+                } else if (itemCategory === "EDUCATION") {
+                    itemCategory = "Giáo dục";
+                } else if (itemCategory === "LAW") {
+                    itemCategory = "Pháp luật";
+                } else if (itemCategory === "SPORT") {
+                    itemCategory = "Thể thao";
+                } else if (itemCategory === "WORLD") {
+                    itemCategory = "Thế giới"
+                }
+                return (
+                    <Col key={item.value}>
+                        <Row className="news-container">
+                            <Col span={5}>
+                                <img style={{ width: "100%" }} src={item.img} />
+                            </Col>
+
+                            <Col span={19} className="news-items">
+                                <h3 className="news-title">{item.title}</h3>
+                                <p className="news-description">{item.description}</p>
+                                <Divider className="divider"/>
+                                <div>
+                                    <span className="news-category">{itemCategory}</span>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Col>
+                )
+            })}
+        </Col>
     );
 };
 

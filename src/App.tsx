@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <div style={{ marginTop: 140 }}>
+      <div style={{ width: '70%', margin: "140px auto 0 auto" }}>
         <Outlet />
       </div>
     </div>

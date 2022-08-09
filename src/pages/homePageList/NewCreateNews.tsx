@@ -28,7 +28,7 @@ const NewCreateNews = () => {
     }, []);
 
     const IconText = ({ icon, text }: any) => (
-        <Space>
+        <Space key={text}>
             {React.createElement(icon)}
             {text}
         </Space>
@@ -61,7 +61,7 @@ const NewCreateNews = () => {
                     dataSource={hotNewsList}
                     renderItem={(item, index) => (
                         <List.Item
-                            key={item.id}
+                            key={item.index}
                             actions={[
                                 <IconText
                                     icon={EyeOutlined}
