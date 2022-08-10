@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
-import { Col, Divider, List, Row, Space } from "antd";
+import { Col, Row, Image, Card } from "antd";
 import "../../index.css"
 import { Link } from "react-router-dom";
 import {
@@ -10,6 +10,8 @@ import {
     setPhoto,
 } from "../../features/counter/counterSlice";
 import { useAppDispatch } from "../../app/hooks";
+import { EyeOutlined, MessageOutlined } from "@ant-design/icons";
+import Meta from "antd/lib/card/Meta";
 
 const HotNews = () => {
     const [hotNewsList, setHotNewsList] = useState<any[]>([]);
@@ -18,7 +20,6 @@ const HotNews = () => {
         const url = "https://heroku-done-all-manager.herokuapp.com/api/news/user/views";
         const response = await fetch(url);
         const newsData = await response.json();
-        console.log(newsData);
         setHotNewsList(newsData);
     };
 
@@ -26,12 +27,12 @@ const HotNews = () => {
         hotNewsListAPI();
     }, []);
 
-    const IconText = ({ icon, text }: any) => (
-        <Space>
-            {React.createElement(icon)}
-            {text}
-        </Space>
-    );
+    // const IconText = ({ icon, text }: any) => (
+    //     <Space>
+    //         {React.createElement(icon)}
+    //         {text}
+    //     </Space>
+    // );
 
     const dispatch = useAppDispatch();
 
@@ -44,46 +45,77 @@ const HotNews = () => {
 
     return (
         <Col>
-            <h2>Tin tức nổi bật</h2>
-            {hotNewsList.map((item: any) => {
+            <h2>
+                <Link to="#" className="news-list-heading">Tin tức nổi bật</Link>
+            </h2>
+            {hotNewsList.map((item: any, index: any) => {
+                let newArray = []
+
+                for (var i = 0; i < hotNewsList.length; i++) {
+                    newArray.push(hotNewsList[i].views)
+                }
+
+                let maxViews = newArray[0]
+                for (let i = 0; i < newArray.length; i++) {
+                    if (maxViews < newArray[i])
+                        maxViews = newArray[i]
+                }
+
+                console.log("newArray", newArray);
+
+                console.log("maxViews =", maxViews);
+
                 let itemCategory = item.categories[0].name
                 if (itemCategory === "POLITICAL") {
-                    itemCategory = "Chính trị";
+                    itemCategory = "CHÍNH TRỊ";
                 } else if (itemCategory === "SOCIAL") {
-                    itemCategory = "Xã hội";
+                    itemCategory = "XÃ HỘI";
                 } else if (itemCategory === "ECONOMY") {
-                    itemCategory = "Kinh tế";
+                    itemCategory = "KINH TẾ";
                 } else if (itemCategory === "HEALTH") {
-                    itemCategory = "Sức khỏe";
+                    itemCategory = "SỨC KHỎE";
                 } else if (itemCategory === "EDUCATION") {
-                    itemCategory = "Giáo dục";
+                    itemCategory = "GIÁO DỤC";
                 } else if (itemCategory === "LAW") {
-                    itemCategory = "Pháp luật";
+                    itemCategory = "PHÁP LUẬT";
                 } else if (itemCategory === "SPORT") {
-                    itemCategory = "Thể thao";
+                    itemCategory = "THỂ THAO";
                 } else if (itemCategory === "WORLD") {
-                    itemCategory = "Thế giới"
+                    itemCategory = "THẾ GIỚI"
                 }
-                return (
-                    <Col key={item.value}>
-                        <Row className="news-container">
-                            <Col span={5}>
-                                <img style={{ width: "100%" }} src={item.img} />
-                            </Col>
 
-                            <Col span={19} className="news-items">
-                                <h3 className="news-title">{item.title}</h3>
-                                <p className="news-description">{item.description}</p>
-                                <Divider className="divider"/>
-                                <div>
-                                    <span className="news-category">{itemCategory}</span>
+                if (item.views === maxViews) {
+                    return (
+                        <Row key={item.id} className="max-views-news-container">
+                            <img style={{ width: "30%", height: "auto" }} src={item.img} />
+                            <Col span={13} className="max-views-news-text">
+                                <h2>{item.title}</h2>
+                                <div className="max-views-news-category">
+                                    <p>{itemCategory}</p>
+                                </div>
+                                <p>{item.description}</p>
+                            </Col>
+                        </Row>
+                    )
+                }
+            })}
+            <Row className="little-news-container">
+                {hotNewsList.map((item: any) => {
+                    return (
+                        <Row key={item.id} >
+                            <Col span={24} className="little-news-items">
+                                <div style={{width: 200, height: 100}}>
+                                    <img style={{ width: "100%" }} alt="example" src={item.img} />
+                                    <div>
+                                        <p>{item.title}</p>
+                                    </div>
                                 </div>
                             </Col>
                         </Row>
-                    </Col>
-                )
-            })}
-        </Col>
+                    )
+                })}
+            </Row>
+        </Col >
     );
 };
 

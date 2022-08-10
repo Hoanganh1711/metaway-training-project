@@ -232,9 +232,10 @@ const CreateNewsForm = () => {
                         >
                             <Upload
                                 name="avatar"
-                                listType="picture-card"
+                                listType="picture"
                                 className="avatar-uploader"
-                                showUploadList={false}
+                                accept=".png,.jpg"
+                                showUploadList={{showRemoveIcon: true}}
                                 action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                                 beforeUpload={beforeUpload}
                                 onChange={handleUploadPhoto}
