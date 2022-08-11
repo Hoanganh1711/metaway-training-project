@@ -1,4 +1,4 @@
-import { Col, Form, Input, Select } from "antd";
+import { Col, Form, Input, Select, Spin } from "antd";
 import { UploadOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Upload, message } from "antd";
 import "../../index.css";
@@ -21,9 +21,9 @@ const beforeUpload = (file: RcFile) => {
     if (!isJpgOrPng) {
         message.error('You can only upload JPG/PNG file!');
     }
-    const isLt2M = file.size / 1024 / 1024 < 4;
+    const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-        message.error('Image must smaller than 3MB!');
+        message.error('Image must smaller than 2MB!');
     }
     return isJpgOrPng && isLt2M;
 };
@@ -82,7 +82,7 @@ const CreateNewsForm = () => {
             description: inputDescription,
             content: inputContent,
             img: imageUrl,
-            status: false,
+            status: true,
             author: "admin2",
             views: 0
         }, {
@@ -127,7 +127,7 @@ const CreateNewsForm = () => {
         if (info.file.status === 'done') {
             // Get this url from response in real world.
             getBase64(info.file.originFileObj as RcFile, url => {
-                setLoading(false);
+                setLoading(true);
                 setImageUrl(url);
             });
         }
@@ -231,18 +231,45 @@ const CreateNewsForm = () => {
                             getValueFromEvent={normFile}
                         >
                             <Upload
-                                name="avatar"
+                                multiple
+                                action={"https://heroku-done-all-manager.herokuapp.com/api/v1/image/upload"}
                                 listType="picture"
-                                className="avatar-uploader"
-                                accept=".png,.jpg"
-                                showUploadList={{showRemoveIcon: true}}
-                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                beforeUpload={beforeUpload}
                                 onChange={handleUploadPhoto}
+                                showUploadList={{ showRemoveIcon: true }}
+                                accept=".png,.jpeg,.jpg"
+                                // beforeUpload={(file) => {
+                                //     console.log(file)
+                                //     return true
+                                // }}
+                                beforeUpload={beforeUpload}
+                                // defaultFileList={[
+                                //     {
+                                //         uid: "abc",
+                                //         name: "exising_file.png",
+                                //         status: "uploading",
+                                //         percent: 50,
+                                //         url: "https://www/goolge.com/"
+                                //     },
+                                // ]}
+                                iconRender={() => {
+                                    return <Spin></Spin>
+                                }}
+                                // itemRender={(exisingComp: any, file: any) => {
+                                //     return <p>{file.name}</p>
+                                // }}
+                                progress={{
+                                    strokeWidth: 3,
+                                    strokeColor: {
+                                        "0%": "#f0f",
+                                        "50%": "#ff0"
+                                    }
+                                }}
                             >
-                                {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                                <Button>Button</Button>
                             </Upload>
                         </Form.Item>
+
+
 
                         <Form.Item
                             style={{ textAlign: "center" }}

@@ -81,11 +81,12 @@ function SignUp() {
 
     const SingUp = () => {
         axios.post('https://heroku-done-all-manager.herokuapp.com/api/auth/signup', {
-            firstname: inputFirstName,
-            lastname: inputLastName,
+            firstName: inputFirstName,
+            lastName: inputLastName,
             username: inputUserName,
             email: inputEmail,
             password: inputPassWord,
+            role : ["user"]
         })
             .then(response => {
                 console.log(response);
@@ -161,7 +162,7 @@ function SignUp() {
                         },
                     ]}
                 >
-                    <Input placeholder='User Name' onChange={handleInputEmail} />
+                    <Input placeholder='User Name' onChange={handleInputUsername} />
                 </Form.Item>
 
                 <Form.Item

@@ -13,7 +13,7 @@ const { Search } = Input;
 const onSearch = (value: string) => console.log(value);
 
 const isToken = localStorage.getItem("token");
-console.log(isToken);
+// console.log(isToken);
 
 const clearToken = () => {
     localStorage.removeItem("token");
@@ -70,7 +70,7 @@ function Header() {
     const categoriesAPI = async () => {
         await axios.get('https://heroku-done-all-manager.herokuapp.com/api/category/user/views')
             .then(response => {
-                console.log(response.data);
+                // console.log(response.data);
                 setCategories(response.data)
             })
             .catch(error => {
@@ -84,77 +84,80 @@ function Header() {
 
     return (
         <div className="header">
-            <Row className="top-header">
-                <Col>
-                    <Link to="/">
-                        <img
-                            className="header-logo"
-                            src="https://cdn.logo.com/hotlink-ok/logo-social.png"
-                        ></img>
-                    </Link>
-                </Col>
-                <Col>
-                    <Row className="search-group">
-                        <Search
-                            placeholder="Tìm kiềm"
-                            onSearch={onSearch}
-                            style={{ width: 400, borderLeft: "none" }}
-                            enterButton
-                        />
-                    </Row>
-                </Col>
-                <Col>
-                    {!isToken ? (
-                        <Link to="/signIn" className="login-btn">
-                            <UserOutlined /> Đăng nhập
+            <div className="header-top">
+                <Row className="top-header">
+                    <Col>
+                        <Link to="/">
+                            <img
+                                className="header-logo"
+                                src="https://cdn.logo.com/hotlink-ok/logo-social.png"
+                            ></img>
                         </Link>
-                    ) : (
-                        <Row className="header-buttons">
-                            <div style={{ marginRight: 20, textAlign: "center" }}>
-                                <Dropdown overlay={menu} placement="bottom" arrow>
-                                    <div style={{ cursor: "pointer" }}>
-                                        <Avatar
-                                            style={{ marginBottom: 3 }}
-                                            size={36}
-                                            icon={<UserOutlined />}
-                                        />
-                                    </div>
-                                </Dropdown>
-                            </div>
+                    </Col>
+                    <Col>
+                        <Row className="search-group">
+                            <Search
+                                placeholder="Tìm kiềm"
+                                onSearch={onSearch}
+                                style={{ width: 400, borderLeft: "none" }}
+                                enterButton
+                            />
                         </Row>
-                    )}
-                </Col>
-            </Row>
-
+                    </Col>
+                    <Col>
+                        {!isToken ? (
+                            <Link to="/signIn" className="login-btn">
+                                <UserOutlined /> Đăng nhập
+                            </Link>
+                        ) : (
+                            <Row className="header-buttom">
+                                <div style={{ marginRight: 20, textAlign: "center" }}>
+                                    <Dropdown overlay={menu} placement="bottom" arrow>
+                                        <div style={{ cursor: "pointer" }}>
+                                            <Avatar
+                                                style={{ marginBottom: 3 }}
+                                                size={36}
+                                                icon={<UserOutlined />}
+                                            />
+                                        </div>
+                                    </Dropdown>
+                                </div>
+                            </Row>
+                        )}
+                    </Col>
+                </Row>
+            </div>
             <Divider className="divider" />
-
-            <Row className="nav">
-                {categories.map((category: any) => {
-                    if (category.name === "HOMEPAGE") {
-                        category.name = <HomeFilled />;
-                    } else if (category.name === "POLITICAL") {
-                        category.name = "Chính trị";
-                    } else if (category.name === "SOCIAL") {
-                        category.name = "Xã hội";
-                    } else if (category.name === "ECONOMY") {
-                        category.name = "Kinh tế";
-                    } else if (category.name === "HEALTH") {
-                        category.name = "Sức khỏe";
-                    } else if (category.name === "EDUCATION") {
-                        category.name = "Giáo dục";
-                    } else if (category.name === "LAW") {
-                        category.name = "Pháp luật";
-                    } else if (category.name === "SPORT") {
-                        category.name = "Thể thao";
-                    } else if (category.name === "WORLD") {
-                        category.name = "Thế giới"
-                    }
-                    return (
-                        <Link to="#" className="category" key={category.name}>{category.name}</Link>
-                    )
-                })}
-            </Row>
+            <div className="header-bootom">
+                <Row className="nav">
+                    {categories.map((category: any) => {
+                        if (category.name === "HOMEPAGE") {
+                            category.name = <HomeFilled />;
+                        } else if (category.name === "POLITICAL") {
+                            category.name = "Chính trị";
+                        } else if (category.name === "SOCIAL") {
+                            category.name = "Xã hội";
+                        } else if (category.name === "ECONOMY") {
+                            category.name = "Kinh tế";
+                        } else if (category.name === "HEALTH") {
+                            category.name = "Sức khỏe";
+                        } else if (category.name === "EDUCATION") {
+                            category.name = "Giáo dục";
+                        } else if (category.name === "LAW") {
+                            category.name = "Pháp luật";
+                        } else if (category.name === "SPORT") {
+                            category.name = "Thể thao";
+                        } else if (category.name === "WORLD") {
+                            category.name = "Thế giới"
+                        }
+                        return (
+                            <Link to="#" className="category" key={category.name}>{category.name}</Link>
+                        )
+                    })}
+                </Row>
+            </div>
         </div>
+
     );
 }
 

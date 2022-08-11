@@ -32,7 +32,6 @@ function SignIn() {
             .then(response => {
                 // const history = useHistory()
                 console.log(response);
-                console.log(response.data.token);
                 const token = response.data.token
                 setToken(token)
                 localStorage.setItem('token', token)
@@ -50,7 +49,6 @@ function SignIn() {
                 setError("Tên tài khoản hoặc mật khẩu chưa đúng !")
             })
     }
-
 
     return (
         <>

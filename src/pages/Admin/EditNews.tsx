@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { UploadOutlined } from '@ant-design/icons'
-import { Button, Col, Form, Input, Row, Select, Upload } from 'antd'
+import { Button, Col, Form, Input, Row, Select, Spin, Upload } from 'antd'
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -21,7 +21,7 @@ const beforeUpload = (file: RcFile) => {
     if (!isJpgOrPng) {
         message.error('You can only upload JPG/PNG file!');
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
+    const isLt2M = file.size / 1024 / 1024 < 10;
     if (!isLt2M) {
         message.error('Image must smaller than 2MB!');
     }
@@ -40,7 +40,7 @@ const EditNews = () => {
 
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>();
-    
+
     const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
         if (info.file.status === 'uploading') {
             setLoading(true);
@@ -82,7 +82,7 @@ const EditNews = () => {
                 console.log(response.data.description);
                 console.log(response.data.categorie);
                 setImageUrl(response.data.img)
-                
+
 
                 form.setFieldsValue({
                     category: response.data.categories.map((item: any) => item.id),
@@ -130,7 +130,7 @@ const EditNews = () => {
         setSelectCategories(e)
         console.log(e);
     }
-    console.log("selectCategories",selectCategories);
+    console.log("selectCategories", selectCategories);
 
     const handleInputChangeTitle = (e: any) => {
         setInputChangeTitle(e.target.value);
@@ -146,8 +146,8 @@ const EditNews = () => {
 
     const handleSelectChangeStatus = (e: any) => {
         console.log(e);
-        
-        if(e === "pending") {
+
+        if (e === "pending") {
             setSelectChangeStatus(false)
         }
     }
@@ -156,8 +156,8 @@ const EditNews = () => {
         axios.put(`https://heroku-done-all-manager.herokuapp.com/api/news/update/${params}`,
             {
                 categories: selectCategories.map((category: any) => {
-                    return(
-                        {id: category}
+                    return (
+                        { id: category }
                     )
                 }),
                 title: inputChangeTitle,
@@ -172,7 +172,7 @@ const EditNews = () => {
             }
         }
         )
-            .then(response => {  
+            .then(response => {
                 console.log(response);
             })
             .catch(error => {
@@ -182,7 +182,7 @@ const EditNews = () => {
     }
 
     return (
-        <>
+        <div>
             <Col span={16} style={{ margin: "0 auto" }}>
                 <h2>Sửa bài viết</h2>
                 <div
@@ -215,11 +215,9 @@ const EditNews = () => {
                             >
                                 {categories.map((categorie: any) => {
                                     return (
-                                        <>
-                                            <Select.Option key={categorie.index} value={categorie.id}>
-                                                {categorie.name}
-                                            </Select.Option>
-                                        </>
+                                        <Select.Option key={categorie.id} value={categorie.id}>
+                                            {categorie.name}
+                                        </Select.Option>
                                     )
                                 })}
                             </Select>
@@ -275,20 +273,45 @@ const EditNews = () => {
                         <Row style={{ justifyContent: "space-around" }}>
                             <Form.Item
                                 name="upload"
-                                label="Ảnh minh họa:"
+                                label="Thêm ảnh minh họa:"
                                 valuePropName="fileList"
                                 getValueFromEvent={normFile}
                             >
                                 <Upload
-                                    name="avatar"
-                                    listType="picture-card"
-                                    className="avatar-uploader"
-                                    showUploadList={false}
-                                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                    beforeUpload={beforeUpload}
-                                    onChange={handleChange}
+                                    multiple
+                                    action={"https://www.mocky.io/v2/5cc8019d300000980a055e76"}
+                                    listType="picture"
+                                    // onChange={handleUploadPhoto}
+                                    showUploadList={{ showRemoveIcon: true }}
+                                    accept=".png,.jpeg,.jpg"
+                                    beforeUpload={(file: any) => {
+                                        console.log(file)
+                                        return false
+                                    }}
+                                    defaultFileList={[
+                                        {
+                                            uid: "abc",
+                                            name: "exising_file.png",
+                                            status: "uploading",
+                                            percent: 50,
+                                            url: "https://www/goolge.com/"
+                                        },
+                                    ]}
+                                    iconRender={() => {
+                                        return <Spin></Spin>
+                                    }}
+                                    // itemRender={(exisingComp: any, file: any) => {
+                                    //     return <p>{file.name}</p>
+                                    // }}
+                                    progress={{
+                                        strokeWidth: 3,
+                                        strokeColor: {
+                                            "0%": "#f0f",
+                                            "50%": "#ff0"
+                                        }
+                                    }}
                                 >
-                                    {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                                    <Button>Button</Button>
                                 </Upload>
                             </Form.Item>
 
@@ -317,7 +340,7 @@ const EditNews = () => {
                     </Form>
                 </div>
             </Col>
-        </>
+        </div>
     )
 }
 

@@ -10,8 +10,8 @@ import {
     setPhoto,
 } from "../../features/counter/counterSlice";
 import { useAppDispatch } from "../../app/hooks";
-import { EyeOutlined, MessageOutlined } from "@ant-design/icons";
-import Meta from "antd/lib/card/Meta";
+// import { EyeOutlined, MessageOutlined } from "@ant-design/icons";
+// import Meta from "antd/lib/card/Meta";
 
 const HotNews = () => {
     const [hotNewsList, setHotNewsList] = useState<any[]>([]);
@@ -44,7 +44,7 @@ const HotNews = () => {
     };
 
     return (
-        <Col>
+        <div>
             <h2>
                 <Link to="#" className="news-list-heading">Tin tức nổi bật</Link>
             </h2>
@@ -61,9 +61,9 @@ const HotNews = () => {
                         maxViews = newArray[i]
                 }
 
-                console.log("newArray", newArray);
+                // console.log("newArray", newArray);
 
-                console.log("maxViews =", maxViews);
+                // console.log("maxViews =", maxViews);
 
                 let itemCategory = item.categories[0].name
                 if (itemCategory === "POLITICAL") {
@@ -87,9 +87,11 @@ const HotNews = () => {
                 if (item.views === maxViews) {
                     return (
                         <Row key={item.id} className="max-views-news-container">
-                            <img style={{ width: "30%", height: "auto" }} src={item.img} />
-                            <Col span={13} className="max-views-news-text">
-                                <h2>{item.title}</h2>
+                            {/* <Col className="max-views-news-img" span={8}> */}
+                                <img style={{ width: "300px", height: "auto" }} src={item.img} />
+                            {/* </Col> */}
+                            <Col className="max-views-news-text" span={16}>
+                                <h2 className="max-views-news-title">{item.title}</h2>
                                 <div className="max-views-news-category">
                                     <p>{itemCategory}</p>
                                 </div>
@@ -104,18 +106,18 @@ const HotNews = () => {
                     return (
                         <Row key={item.id} >
                             <Col span={24} className="little-news-items">
-                                <div style={{width: 200, height: 100}}>
-                                    <img style={{ width: "100%" }} alt="example" src={item.img} />
-                                    <div>
-                                        <p>{item.title}</p>
-                                    </div>
+                                <div style={{ paddingBottom: 20 }}>
+                                    <p className="little-news-title">{item.title}</p>
+                                </div>
+                                <div>
+                                    <p>{item.description}</p>
                                 </div>
                             </Col>
                         </Row>
                     )
                 })}
             </Row>
-        </Col >
+        </div>
     );
 };
 

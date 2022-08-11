@@ -218,8 +218,8 @@ const NewsManager = () => {
             ...getColumnSearchProps("title"),
             render: (text: string, row) => {
                 return (
-                    <Row style={{ alignItems: "center" }}>
-                        <Link key={row.id} to={{ pathname: `/Manager/check/news/${row.id}` }}>
+                    <Row key={row.id} style={{ alignItems: "center" }}>
+                        <Link to={{ pathname: `/Manager/check/news/${row.id}` }}>
                             {text}
                         </Link>
                     </Row>
@@ -241,7 +241,7 @@ const NewsManager = () => {
                 return record.categories.find((category: any) => category.name === value)
             },
             render: (categories: []) => (
-                <>
+                <div key="categories">
                     {categories.map((categorie: any, index: any) => {
                         let color = "";
                         if (categorie.name === "HOMEPAGE") {
@@ -265,7 +265,7 @@ const NewsManager = () => {
                         }
                         return <Tag color={color} key={index}>{categorie.name}</Tag>;
                     })}
-                </>
+                </div>
             )
         },
         {
@@ -305,8 +305,8 @@ const NewsManager = () => {
             width: "20%",
             render: (abc, row) => {
                 return (
-                    <Row style={{ alignItems: "center" }}>
-                        <Link key={row.id} to={{ pathname: `/manager/editNews/${row.id}` }}>
+                    <Row key={row.id} style={{ alignItems: "center" }}>
+                        <Link to={{ pathname: `/manager/editNews/${row.id}` }}>
                             <EditTwoTone /> Chỉnh sửa
                         </Link>
                         <Button onClick={() => deleteOneNew(abc, row)} type="link" danger>
