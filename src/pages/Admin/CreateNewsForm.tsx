@@ -3,8 +3,6 @@ import { UploadOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons
 import { Button, Upload, message } from "antd";
 import "../../index.css";
 import { useEffect, useRef, useState } from "react";
-import { useQuill } from "react-quilljs";
-import "quill/dist/quill.snow.css";
 import axios from "axios";
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -54,16 +52,6 @@ const CreateNewsForm = () => {
     useEffect(() => {
         categoriesAPI()
     }, [])
-
-    // const { quill, quillRef } = useQuill();
-    // useEffect(() => {
-    //     if (quill) {
-    //         quill.on("text-change", (delta: any, oldDelta: any, source: any) => {
-    //             setInputContent(quill.getText())
-    //         });
-    //     }
-    // }, [quill]);
-
 
     const normFile = (e: any) => {
         console.log("Upload event:", e);
@@ -120,12 +108,13 @@ const CreateNewsForm = () => {
     }
 
     const handleUploadPhoto: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
+        
         if (info.file.status === 'uploading') {
             setLoading(true);
             return;
         }
+
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             getBase64(info.file.originFileObj as RcFile, url => {
                 setLoading(true);
                 setImageUrl(url);
@@ -264,6 +253,7 @@ const CreateNewsForm = () => {
                                         "50%": "#ff0"
                                     }
                                 }}
+                                
                             >
                                 <Button>Button</Button>
                             </Upload>

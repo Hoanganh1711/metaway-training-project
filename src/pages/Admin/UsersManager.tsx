@@ -408,20 +408,20 @@ const UsersManager = () => {
                 );
             },
         },
-        {
-            title: "Điều chỉnh",
-            dataIndex: "setting",
-            key: "setting",
-            width: "40%",
-            ...getColumnSearchProps("fullName"),
-            render: (index: any, row: any) => {
-                return (
-                    <Row onClick={() => showSettingModal(row)} style={{ alignItems: "center", cursor: 'pointer' }}>
-                        <SettingTwoTone />
-                    </Row>
-                );
-            },
-        },
+        // {
+        //     title: "Điều chỉnh",
+        //     dataIndex: "setting",
+        //     key: "setting",
+        //     width: "40%",
+        //     ...getColumnSearchProps("fullName"),
+        //     render: (index: any, row: any) => {
+        //         return (
+        //             <Row onClick={() => showSettingModal(row)} style={{ alignItems: "center", cursor: 'pointer' }}>
+        //                 <SettingTwoTone />
+        //             </Row>
+        //         );
+        //     },
+        // },
     ];
 
     return (

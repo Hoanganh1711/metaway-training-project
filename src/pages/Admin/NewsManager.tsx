@@ -88,24 +88,20 @@ const NewsManager = () => {
             icon: <ExclamationCircleOutlined />,
             okType: "danger",
             onOk: () => {
-                newsList.filter((data: any) => {
-                    axios
-                        .delete(
-                            `https://heroku-done-all-manager.herokuapp.com/api/news/delete/${row.id}`,
-                            {
-                                headers: {
-                                    Authorization: "Bearer " + localStorage.getItem("token"),
-                                },
-                            }
-                        )
-                        .then(function (response) {
-                            window.location.reload();
-                            setNewsList(response.data);
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                });
+                axios.delete(`https://heroku-done-all-manager.herokuapp.com/api/news/delete/${row.id}`,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token"),
+                        },
+                    }
+                )
+                    .then(function (response) {
+                        window.location.reload();
+                        setNewsList(response.data);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             cancelText: "Cancel",
         });

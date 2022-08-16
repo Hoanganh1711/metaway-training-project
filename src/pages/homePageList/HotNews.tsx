@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable array-callback-return */
 import React, { useEffect, useState } from "react";
 import { Col, Row, Image, Card } from "antd";
 import "../../index.css"
@@ -88,10 +88,12 @@ const HotNews = () => {
                     return (
                         <Row key={item.id} className="max-views-news-container">
                             {/* <Col className="max-views-news-img" span={8}> */}
-                                <img style={{ width: "300px", height: "auto" }} src={item.img} />
+                            <img style={{ width: "300px", height: "auto" }} src={item.img} />
                             {/* </Col> */}
                             <Col className="max-views-news-text" span={16}>
-                                <h2 className="max-views-news-title">{item.title}</h2>
+                                <Link to="/showNews">
+                                    <h2 className="max-views-news-title" onClick={() => handleClickGetShowNews(hotNewsList, index)}>{item.title}</h2>
+                                </Link>
                                 <div className="max-views-news-category">
                                     <p>{itemCategory}</p>
                                 </div>
@@ -102,13 +104,14 @@ const HotNews = () => {
                 }
             })}
             <Row className="little-news-container">
-                {hotNewsList.map((item: any) => {
+                {hotNewsList.map((item: any, index: any) => {
                     return (
                         <Row key={item.id} >
                             <Col span={24} className="little-news-items">
-                                <div style={{ paddingBottom: 20 }}>
-                                    <p className="little-news-title">{item.title}</p>
-                                </div>
+                                <Link className="little-news-title" style={{ paddingBottom: 20 }} to="/showNews">
+                                    <p onClick={() => handleClickGetShowNews(hotNewsList, index)}>{item.title}</p>
+                                </Link>
+                                <Image src={item.img}/>
                                 <div>
                                     <p>{item.description}</p>
                                 </div>
@@ -123,6 +126,10 @@ const HotNews = () => {
 
 export default HotNews;
 
+
+function index(hotNewsList: any[], index: any): void {
+    throw new Error("Function not implemented.");
+}
 // function dispatch(arg0: { payload: any; type: string }) {
 //   throw new Error("Function not implemented.");
 // }

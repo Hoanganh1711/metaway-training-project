@@ -85,8 +85,7 @@ function SignUp() {
             lastName: inputLastName,
             username: inputUserName,
             email: inputEmail,
-            password: inputPassWord,
-            role : ["user"]
+            password: inputPassWord
         })
             .then(response => {
                 console.log(response);

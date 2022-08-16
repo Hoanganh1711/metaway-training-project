@@ -7,6 +7,8 @@ import { useEffect, useState } from "react"
 import { Image } from 'antd';
 import { Select } from 'antd'
 import { timeStamp } from "console"
+import { useAppSelector, useAppDispatch } from '../../app/hooks'
+import { setLastName, setFirstName, setBirthday, setGender, setEmail, setAddress, setPhoneNumber } from "../../features/counter/getMyInfo"
 
 const editProfileText = <span>Edit profile</span>
 const editAvatarText = <span>Update Avatar</span>
@@ -37,6 +39,8 @@ const { Option } = Select;
 
 
 const AdminInfo = () => {
+    const dispatch = useAppDispatch()
+
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [userName, setUserName] = useState('')
@@ -104,9 +108,6 @@ const AdminInfo = () => {
                 setAvatar(response.data.avt)
                 setBirthDay(response.data.birthday)
                 setGender(response.data.gender)
-
-                console.log(typeof response.data.birthday);
-
 
                 form.setFieldsValue({
                     lastName: response.data.lastName,
