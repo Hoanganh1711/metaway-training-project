@@ -8,7 +8,6 @@ import { Image } from 'antd';
 import { Select } from 'antd'
 import { timeStamp } from "console"
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
-import { setLastName, setFirstName, setBirthday, setGender, setEmail, setAddress, setPhoneNumber } from "../../features/counter/getMyInfo"
 
 const editProfileText = <span>Edit profile</span>
 const editAvatarText = <span>Update Avatar</span>
@@ -112,7 +111,7 @@ const AdminInfo = () => {
                 form.setFieldsValue({
                     lastName: response.data.lastName,
                     firstName: response.data.firstName,
-                    // birthday: response.data.birthday,
+                    //birthday: response.data.birthday,
                     gender: response.data.gender,
                     email: response.data.email,
                     address: response.data.address,

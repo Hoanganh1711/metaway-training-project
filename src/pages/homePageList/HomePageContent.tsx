@@ -6,7 +6,6 @@ import { BackTop } from "antd";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import { useEffect, useLayoutEffect, useState } from "react";
 
-
 const style: React.CSSProperties = {
     height: 40,
     width: 40,

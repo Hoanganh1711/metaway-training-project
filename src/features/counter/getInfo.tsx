@@ -1,14 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getImpliedNodeFormatForFile } from "typescript";
 
 interface CounterState {
-    lastName: String,
-    firstName: String,
-    birthday: String,
-    gender: String,
-    email: String,
-    address: String,
-    phoneNumber: String
+    lastName: string,
+    firstName: string,
+    birthday: string,
+    gender: string,
+    email: string,
+    address: string,
+    phoneNumber: string
 }
 
 const initialState: CounterState = {

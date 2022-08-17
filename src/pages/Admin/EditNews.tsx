@@ -128,7 +128,7 @@ const EditNews = () => {
 
     const handleSelectTopic = (e: any) => {
         setSelectCategories(e)
-        console.log(e);
+        console.log("categories", e);
     }
     console.log("selectCategories", selectCategories);
 
@@ -152,17 +152,15 @@ const EditNews = () => {
         }
     }
 
-    const saveChange = () => {
+    const onFinish = (values: any) => {
+        console.log("values", values);
+
         axios.put(`https://heroku-done-all-manager.herokuapp.com/api/news/update/${params}`,
             {
-                categories: selectCategories.map((category: any) => {
-                    return (
-                        { id: category }
-                    )
-                }),
-                title: inputChangeTitle,
-                description: inputDescription,
-                content: changedContent,
+                categories: [{ id: values.category[0] }],
+                title: values.title,
+                description: values.description,
+                content: values.content,
                 author: "admin2",
                 img: imageUrl,
                 status: selectChangeStatus
@@ -195,6 +193,7 @@ const EditNews = () => {
                     <Form
                         name="validate_other"
                         layout="vertical"
+                        onFinish={onFinish}
                         form={form}
                     >
                         <Form.Item
@@ -333,7 +332,7 @@ const EditNews = () => {
                                 offset: 6,
                             }}
                         >
-                            <Button type="primary" htmlType="submit" onClick={saveChange}>
+                            <Button type="primary" htmlType="submit">
                                 Lưu thay đổi
                             </Button>
                         </Form.Item>
